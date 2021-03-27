@@ -10,7 +10,7 @@
 #include "fns.h"
 
 char *cookiefile;
-char *service;
+char *service = "web";
 
 Ctl globalctl = 
 {
@@ -25,6 +25,12 @@ usage(void)
 {
 	fprint(2, "usage: webfs [-c cookies] [-s service]\n");
 	threadexitsall("usage");
+}
+
+int
+threadmaybackground(void)
+{
+	return 1;
 }
 
 //#include <pool.h>
