@@ -1,0 +1,5 @@
+stacks	stk
+mk install && mk clean
+slay abaco | rc
+mk dist
+http://www.w3.org/TR/DOM-Level-3-Core/

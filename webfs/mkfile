@@ -1,0 +1,35 @@
+<$PLAN9/src/mkhdr
+BIN=$PLAN9/bin
+
+TARG=webfs
+
+SCHEMEOFILES=\
+	file.$O\
+	ftp.$O\
+	http.$O\
+
+OFILES=\
+	buf.$O\
+	client.$O\
+	cookies.$O\
+	fs.$O\
+	http.$O\
+	io.$O\
+	main.$O\
+	plumb.$O\
+	url.$O\
+	util.$O\
+#	$SCHEMEOFILES
+
+HFILES=\
+	dat.h\
+	fns.h\
+
+UPDATE=\
+	mkfile\
+	$HFILES\
+	${OFILES:%.$O=%.c}\
+	${TARG:%=/386/bin/%}\
+
+<$PLAN9/src/mkone
+

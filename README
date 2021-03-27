@@ -1,0 +1,28 @@
+Abaco: lame web browser for Plan 9, eternally a work in progress.
+Plan9port version.
+
+Build:
+        If you have plan9port installed in a non-standard location,
+        change sources accordingly. An easy way to do it is 
+        sed -i 's|/usr/local/plan9|/where/is/plan9port|g' abaco/*.[ch]
+	
+	you can also build with -DSTANDALONE, which will use freefont
+	in /usr/share/abaco (intended for p9p-less binary packages)
+
+	mk
+	cp abaco/passwd.6.font /usr/local/plan9/font/lucsans/
+	
+	check ./plumbing
+Run:
+	If you want a nicer antialiased font, put freefont into your
+	conventional plan9port font directory and 
+	cp abaco/abaco.fonts $HOME/.abaco.fonts
+	You may modify this file to your liking without rebuilding abaco.
+
+	See abaco.sh for what to do before running abaco itself.
+
+Enjoy!
+
+Federico G. Benavento - benavento@gmail.com
+
+plan9port maintainer: Oleg Finkelshteyn - olegfink@gmail.com

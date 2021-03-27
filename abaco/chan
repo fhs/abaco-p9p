@@ -1,0 +1,12 @@
+main.c:136:	rowinit(&row, screen->clipr);
+main.c:297:			rowresize(&row, screen->clipr);
+main.c:357:	tagcols[HIGH] = eallocimage(display, Rect(0,0,1,1), screen->chan, 1, DDarkgreen);
+main.c:358:	tagcols[BORD] = eallocimage(display, Rect(0,0,1,1), screen->chan, 1, DMedgreen);
+main.c:370:	button = eallocimage(display, r, screen->chan, 0, DNofill);
+main.c:376:	colbutton = eallocimage(display, r, screen->chan, 0, 0x00994CFF);
+main.c:378:	but2col = eallocimage(display, Rect(0,0,1,2), screen->chan, 1, 0xAA0000FF);
+main.c:379:	but3col = eallocimage(display, Rect(0,0,1,2), screen->chan, 1, 0x444488FF);
+page.c:418:	tmp = eallocimage(display, Rect(0,0,Dx(screen->r),Dy(screen->r)), screen->chan, 0, -1);
+scrl.c:61:	vscrtmp = eallocimage(display, Rect(0, 0, 32, screen->r.max.y), screen->chan, 0, DNofill);
+scrl.c:62:	hscrtmp = eallocimage(display, Rect(0, 0, screen->r.max.x, 32), screen->chan, 0, DNofill);
+util.c:516:	c->i = eallocimage(display, Rect(0,0,1,1), screen->chan, 1, (rgb<<8)|0xFF);

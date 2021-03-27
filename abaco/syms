@@ -1,0 +1,3560 @@
+sizeof_1_ = 8;
+aggr _1_
+{
+	'U' 0 lo;
+	'U' 4 hi;
+};
+
+defn
+_1_(addr) {
+	complex _1_ addr;
+	print("	lo	", addr.lo, "\n");
+	print("	hi	", addr.hi, "\n");
+};
+
+sizeofFPdbleword = 8;
+aggr FPdbleword
+{
+	'F' 0 x;
+	{
+	'U' 0 lo;
+	'U' 4 hi;
+	};
+};
+
+defn
+FPdbleword(addr) {
+	complex FPdbleword addr;
+	print("	x	", addr.x, "\n");
+	print("_1_ {\n");
+		_1_(addr+0);
+	print("}\n");
+};
+
+UTFmax = 3;
+Runesync = 128;
+Runeself = 128;
+Runeerror = 65533;
+sizeofFmt = 48;
+aggr Fmt
+{
+	'b' 0 runes;
+	'X' 4 start;
+	'X' 8 to;
+	'X' 12 stop;
+	'X' 16 flush;
+	'X' 20 farg;
+	'D' 24 nfmt;
+	'X' 28 args;
+	'D' 32 r;
+	'D' 36 width;
+	'D' 40 prec;
+	'U' 44 flags;
+};
+
+defn
+Fmt(addr) {
+	complex Fmt addr;
+	print("	runes	", addr.runes, "\n");
+	print("	start	", addr.start\X, "\n");
+	print("	to	", addr.to\X, "\n");
+	print("	stop	", addr.stop\X, "\n");
+	print("	flush	", addr.flush\X, "\n");
+	print("	farg	", addr.farg\X, "\n");
+	print("	nfmt	", addr.nfmt, "\n");
+	print("	args	", addr.args\X, "\n");
+	print("	r	", addr.r, "\n");
+	print("	width	", addr.width, "\n");
+	print("	prec	", addr.prec, "\n");
+	print("	flags	", addr.flags, "\n");
+};
+
+FmtWidth = 1;
+FmtLeft = 2;
+FmtPrec = 4;
+FmtSharp = 8;
+FmtSpace = 16;
+FmtSign = 32;
+FmtZero = 64;
+FmtUnsigned = 128;
+FmtShort = 256;
+FmtLong = 512;
+FmtVLong = 1024;
+FmtComma = 2048;
+FmtByte = 4096;
+FmtFlag = 8192;
+sizeofTm = 40;
+aggr Tm
+{
+	'D' 0 sec;
+	'D' 4 min;
+	'D' 8 hour;
+	'D' 12 mday;
+	'D' 16 mon;
+	'D' 20 year;
+	'D' 24 wday;
+	'D' 28 yday;
+	'a' 32 zone;
+	'D' 36 tzoff;
+};
+
+defn
+Tm(addr) {
+	complex Tm addr;
+	print("	sec	", addr.sec, "\n");
+	print("	min	", addr.min, "\n");
+	print("	hour	", addr.hour, "\n");
+	print("	mday	", addr.mday, "\n");
+	print("	mon	", addr.mon, "\n");
+	print("	year	", addr.year, "\n");
+	print("	wday	", addr.wday, "\n");
+	print("	yday	", addr.yday, "\n");
+	print("	zone	", addr.zone, "\n");
+	print("	tzoff	", addr.tzoff, "\n");
+};
+
+PNPROC = 1;
+PNGROUP = 2;
+Profoff = 0;
+Profuser = 1;
+Profkernel = 2;
+Proftime = 3;
+Profsample = 4;
+sizeofLock = 4;
+aggr Lock
+{
+	'D' 0 val;
+};
+
+defn
+Lock(addr) {
+	complex Lock addr;
+	print("	val	", addr.val, "\n");
+};
+
+sizeofQLp = 12;
+aggr QLp
+{
+	'D' 0 inuse;
+	'A' QLp 4 next;
+	'C' 8 state;
+};
+
+defn
+QLp(addr) {
+	complex QLp addr;
+	print("	inuse	", addr.inuse, "\n");
+	print("	next	", addr.next\X, "\n");
+	print("	state	", addr.state, "\n");
+};
+
+sizeofQLock = 16;
+aggr QLock
+{
+	Lock 0 lock;
+	'D' 4 locked;
+	'A' QLp 8 $head;
+	'A' QLp 12 $tail;
+};
+
+defn
+QLock(addr) {
+	complex QLock addr;
+	print("Lock lock {\n");
+	Lock(addr.lock);
+	print("}\n");
+	print("	locked	", addr.locked, "\n");
+	print("	$head	", addr.$head\X, "\n");
+	print("	$tail	", addr.$tail\X, "\n");
+};
+
+sizeofRWLock = 20;
+aggr RWLock
+{
+	Lock 0 lock;
+	'D' 4 readers;
+	'D' 8 writer;
+	'A' QLp 12 $head;
+	'A' QLp 16 $tail;
+};
+
+defn
+RWLock(addr) {
+	complex RWLock addr;
+	print("Lock lock {\n");
+	Lock(addr.lock);
+	print("}\n");
+	print("	readers	", addr.readers, "\n");
+	print("	writer	", addr.writer, "\n");
+	print("	$head	", addr.$head\X, "\n");
+	print("	$tail	", addr.$tail\X, "\n");
+};
+
+sizeofRendez = 12;
+aggr Rendez
+{
+	'A' QLock 0 l;
+	'A' QLp 4 $head;
+	'A' QLp 8 $tail;
+};
+
+defn
+Rendez(addr) {
+	complex Rendez addr;
+	print("	l	", addr.l\X, "\n");
+	print("	$head	", addr.$head\X, "\n");
+	print("	$tail	", addr.$tail\X, "\n");
+};
+
+sizeofNetConnInfo = 36;
+aggr NetConnInfo
+{
+	'X' 0 dir;
+	'X' 4 root;
+	'X' 8 spec;
+	'X' 12 lsys;
+	'X' 16 lserv;
+	'X' 20 rsys;
+	'X' 24 rserv;
+	'X' 28 laddr;
+	'X' 32 raddr;
+};
+
+defn
+NetConnInfo(addr) {
+	complex NetConnInfo addr;
+	print("	dir	", addr.dir\X, "\n");
+	print("	root	", addr.root\X, "\n");
+	print("	spec	", addr.spec\X, "\n");
+	print("	lsys	", addr.lsys\X, "\n");
+	print("	lserv	", addr.lserv\X, "\n");
+	print("	rsys	", addr.rsys\X, "\n");
+	print("	rserv	", addr.rserv\X, "\n");
+	print("	laddr	", addr.laddr\X, "\n");
+	print("	raddr	", addr.raddr\X, "\n");
+};
+
+RFNAMEG = 1;
+RFENVG = 2;
+RFFDG = 4;
+RFNOTEG = 8;
+RFPROC = 16;
+RFMEM = 32;
+RFNOWAIT = 64;
+RFCNAMEG = 1024;
+RFCENVG = 2048;
+RFCFDG = 4096;
+RFREND = 8192;
+RFNOMNT = 16384;
+sizeofQid = 16;
+aggr Qid
+{
+	'W' 0 path;
+	'U' 8 vers;
+	'b' 12 type;
+};
+
+defn
+Qid(addr) {
+	complex Qid addr;
+	print("	path	", addr.path, "\n");
+	print("	vers	", addr.vers, "\n");
+	print("	type	", addr.type, "\n");
+};
+
+sizeofDir = 60;
+aggr Dir
+{
+	'u' 0 type;
+	'U' 4 dev;
+	Qid 8 qid;
+	'U' 24 mode;
+	'U' 28 atime;
+	'U' 32 mtime;
+	'V' 36 length;
+	'X' 44 name;
+	'X' 48 uid;
+	'X' 52 gid;
+	'X' 56 muid;
+};
+
+defn
+Dir(addr) {
+	complex Dir addr;
+	print("	type	", addr.type, "\n");
+	print("	dev	", addr.dev, "\n");
+	print("Qid qid {\n");
+	Qid(addr.qid);
+	print("}\n");
+	print("	mode	", addr.mode, "\n");
+	print("	atime	", addr.atime, "\n");
+	print("	mtime	", addr.mtime, "\n");
+	print("	length	", addr.length, "\n");
+	print("	name	", addr.name\X, "\n");
+	print("	uid	", addr.uid\X, "\n");
+	print("	gid	", addr.gid\X, "\n");
+	print("	muid	", addr.muid\X, "\n");
+};
+
+sizeofWaitmsg = 20;
+aggr Waitmsg
+{
+	'D' 0 pid;
+	'a' 4 time;
+	'X' 16 msg;
+};
+
+defn
+Waitmsg(addr) {
+	complex Waitmsg addr;
+	print("	pid	", addr.pid, "\n");
+	print("	time	", addr.time, "\n");
+	print("	msg	", addr.msg\X, "\n");
+};
+
+sizeofIOchunk = 8;
+aggr IOchunk
+{
+	'X' 0 addr;
+	'U' 4 len;
+};
+
+defn
+IOchunk(addr) {
+	complex IOchunk addr;
+	print("	addr	", addr.addr\X, "\n");
+	print("	len	", addr.len, "\n");
+};
+
+DOpaque = 4294967295;
+DTransparent = 0;
+DBlack = 255;
+DWhite = 4294967295;
+DRed = 4278190335;
+DGreen = 16711935;
+DBlue = 65535;
+DCyan = 16777215;
+DMagenta = 4278255615;
+DYellow = 4294902015;
+DPaleyellow = 4294945535;
+DDarkyellow = 4008615679;
+DDarkgreen = 1149781247;
+DPalegreen = 2868882175;
+DMedgreen = 2295105791;
+DDarkblue = 22015;
+DPalebluegreen = 2868903935;
+DPaleblue = 48127;
+DBluegreen = 8947967;
+DGreygreen = 1437248255;
+DPalegreygreen = 2666458879;
+DYellowgreen = 2576960767;
+DMedblue = 39423;
+DGreyblue = 6142975;
+DPalegreyblue = 1234427391;
+DPurpleblue = 2290666751;
+DNotacolor = 4294967040;
+DNofill = 4294967040;
+Displaybufsize = 8000;
+ICOSSCALE = 1024;
+Borderwidth = 4;
+Refbackup = 0;
+Refnone = 1;
+Refmesg = 2;
+Endsquare = 0;
+Enddisc = 1;
+Endarrow = 2;
+Endmask = 31;
+Clear = 0;
+SinD = 8;
+DinS = 4;
+SoutD = 2;
+DoutS = 1;
+S = 10;
+SoverD = 11;
+SatopD = 9;
+SxorD = 3;
+D = 5;
+DoverS = 7;
+DatopS = 6;
+DxorS = 3;
+Ncomp = 12;
+CRed = 0;
+CGreen = 1;
+CBlue = 2;
+CGrey = 3;
+CAlpha = 4;
+CMap = 5;
+CIgnore = 6;
+NChan = 7;
+GREY1 = 49;
+GREY2 = 50;
+GREY4 = 52;
+GREY8 = 56;
+CMAP8 = 88;
+RGB15 = 1627723045;
+RGB16 = 333349;
+RGB24 = 530472;
+RGBA32 = 135800904;
+ARGB32 = 1208490024;
+XRGB32 = 1745360936;
+BGR24 = 2627592;
+ABGR32 = 1210587144;
+XBGR32 = 1747458056;
+sizeofPoint = 8;
+aggr Point
+{
+	'D' 0 x;
+	'D' 4 y;
+};
+
+defn
+Point(addr) {
+	complex Point addr;
+	print("	x	", addr.x, "\n");
+	print("	y	", addr.y, "\n");
+};
+
+sizeofRectangle = 16;
+aggr Rectangle
+{
+	Point 0 min;
+	Point 8 max;
+};
+
+defn
+Rectangle(addr) {
+	complex Rectangle addr;
+	print("Point min {\n");
+	Point(addr.min);
+	print("}\n");
+	print("Point max {\n");
+	Point(addr.max);
+	print("}\n");
+};
+
+sizeofScreen = 16;
+aggr Screen
+{
+	'X' 0 display;
+	'D' 4 id;
+	'X' 8 image;
+	'X' 12 fill;
+};
+
+defn
+Screen(addr) {
+	complex Screen addr;
+	print("	display	", addr.display\X, "\n");
+	print("	id	", addr.id, "\n");
+	print("	image	", addr.image\X, "\n");
+	print("	fill	", addr.fill\X, "\n");
+};
+
+sizeofDisplay = 176;
+aggr Display
+{
+	QLock 0 qlock;
+	'D' 16 locking;
+	'D' 20 dirno;
+	'D' 24 fd;
+	'D' 28 reffd;
+	'D' 32 ctlfd;
+	'D' 36 imageid;
+	'D' 40 $local;
+	'X' 44 error;
+	'X' 48 devdir;
+	'X' 52 windir;
+	'a' 56 oldlabel;
+	'U' 120 dataqid;
+	'X' 124 white;
+	'X' 128 black;
+	'X' 132 opaque;
+	'X' 136 transparent;
+	'X' 140 image;
+	'X' 144 buf;
+	'D' 148 bufsize;
+	'X' 152 bufp;
+	'X' 156 defaultfont;
+	'X' 160 defaultsubfont;
+	'X' 164 windows;
+	'X' 168 screenimage;
+	'D' 172 _isnewdisplay;
+};
+
+defn
+Display(addr) {
+	complex Display addr;
+	print("QLock qlock {\n");
+	QLock(addr.qlock);
+	print("}\n");
+	print("	locking	", addr.locking, "\n");
+	print("	dirno	", addr.dirno, "\n");
+	print("	fd	", addr.fd, "\n");
+	print("	reffd	", addr.reffd, "\n");
+	print("	ctlfd	", addr.ctlfd, "\n");
+	print("	imageid	", addr.imageid, "\n");
+	print("	$local	", addr.$local, "\n");
+	print("	error	", addr.error\X, "\n");
+	print("	devdir	", addr.devdir\X, "\n");
+	print("	windir	", addr.windir\X, "\n");
+	print("	oldlabel	", addr.oldlabel, "\n");
+	print("	dataqid	", addr.dataqid, "\n");
+	print("	white	", addr.white\X, "\n");
+	print("	black	", addr.black\X, "\n");
+	print("	opaque	", addr.opaque\X, "\n");
+	print("	transparent	", addr.transparent\X, "\n");
+	print("	image	", addr.image\X, "\n");
+	print("	buf	", addr.buf\X, "\n");
+	print("	bufsize	", addr.bufsize, "\n");
+	print("	bufp	", addr.bufp\X, "\n");
+	print("	defaultfont	", addr.defaultfont\X, "\n");
+	print("	defaultsubfont	", addr.defaultsubfont\X, "\n");
+	print("	windows	", addr.windows\X, "\n");
+	print("	screenimage	", addr.screenimage\X, "\n");
+	print("	_isnewdisplay	", addr._isnewdisplay, "\n");
+};
+
+sizeofImage = 60;
+aggr Image
+{
+	'A' Display 0 display;
+	'D' 4 id;
+	Rectangle 8 r;
+	Rectangle 24 clipr;
+	'D' 40 depth;
+	'U' 44 chan;
+	'D' 48 repl;
+	'A' Screen 52 screen;
+	'A' Image 56 next;
+};
+
+defn
+Image(addr) {
+	complex Image addr;
+	print("	display	", addr.display\X, "\n");
+	print("	id	", addr.id, "\n");
+	print("Rectangle r {\n");
+	Rectangle(addr.r);
+	print("}\n");
+	print("Rectangle clipr {\n");
+	Rectangle(addr.clipr);
+	print("}\n");
+	print("	depth	", addr.depth, "\n");
+	print("	chan	", addr.chan, "\n");
+	print("	repl	", addr.repl, "\n");
+	print("	screen	", addr.screen\X, "\n");
+	print("	next	", addr.next\X, "\n");
+};
+
+sizeofRGB = 12;
+aggr RGB
+{
+	'U' 0 red;
+	'U' 4 green;
+	'U' 8 blue;
+};
+
+defn
+RGB(addr) {
+	complex RGB addr;
+	print("	red	", addr.red, "\n");
+	print("	green	", addr.green, "\n");
+	print("	blue	", addr.blue, "\n");
+};
+
+sizeofFontchar = 8;
+aggr Fontchar
+{
+	'D' 0 x;
+	'b' 4 top;
+	'b' 5 bottom;
+	'C' 6 left;
+	'b' 7 width;
+};
+
+defn
+Fontchar(addr) {
+	complex Fontchar addr;
+	print("	x	", addr.x, "\n");
+	print("	top	", addr.top, "\n");
+	print("	bottom	", addr.bottom, "\n");
+	print("	left	", addr.left, "\n");
+	print("	width	", addr.width, "\n");
+};
+
+sizeofSubfont = 20;
+aggr Subfont
+{
+	'X' 0 name;
+	'd' 4 n;
+	'b' 6 height;
+	'C' 7 ascent;
+	'A' Fontchar 8 info;
+	'A' Image 12 bits;
+	'D' 16 ref;
+};
+
+defn
+Subfont(addr) {
+	complex Subfont addr;
+	print("	name	", addr.name\X, "\n");
+	print("	n	", addr.n, "\n");
+	print("	height	", addr.height, "\n");
+	print("	ascent	", addr.ascent, "\n");
+	print("	info	", addr.info\X, "\n");
+	print("	bits	", addr.bits\X, "\n");
+	print("	ref	", addr.ref, "\n");
+};
+
+LOG2NFCACHE = 6;
+NFCACHE = 64;
+NFLOOK = 5;
+NFSUBF = 2;
+MAXFCACHE = 1029;
+MAXSUBF = 50;
+DSUBF = 4;
+SUBFAGE = 10000;
+CACHEAGE = 10000;
+sizeofCachefont = 16;
+aggr Cachefont
+{
+	'u' 0 min;
+	'u' 2 max;
+	'D' 4 offset;
+	'X' 8 name;
+	'X' 12 subfontname;
+};
+
+defn
+Cachefont(addr) {
+	complex Cachefont addr;
+	print("	min	", addr.min, "\n");
+	print("	max	", addr.max, "\n");
+	print("	offset	", addr.offset, "\n");
+	print("	name	", addr.name\X, "\n");
+	print("	subfontname	", addr.subfontname\X, "\n");
+};
+
+sizeofCacheinfo = 8;
+aggr Cacheinfo
+{
+	'u' 0 x;
+	'b' 2 width;
+	'C' 3 left;
+	'u' 4 value;
+	'u' 6 age;
+};
+
+defn
+Cacheinfo(addr) {
+	complex Cacheinfo addr;
+	print("	x	", addr.x, "\n");
+	print("	width	", addr.width, "\n");
+	print("	left	", addr.left, "\n");
+	print("	value	", addr.value, "\n");
+	print("	age	", addr.age, "\n");
+};
+
+sizeofCachesubf = 12;
+aggr Cachesubf
+{
+	'U' 0 age;
+	'A' Cachefont 4 cf;
+	'A' Subfont 8 f;
+};
+
+defn
+Cachesubf(addr) {
+	complex Cachesubf addr;
+	print("	age	", addr.age, "\n");
+	print("	cf	", addr.cf\X, "\n");
+	print("	f	", addr.f\X, "\n");
+};
+
+sizeofFont = 48;
+aggr Font
+{
+	'X' 0 name;
+	'A' Display 4 display;
+	'd' 8 height;
+	'd' 10 ascent;
+	'd' 12 width;
+	'd' 14 nsub;
+	'U' 16 age;
+	'D' 20 maxdepth;
+	'D' 24 ncache;
+	'D' 28 nsubf;
+	'A' Cacheinfo 32 cache;
+	'A' Cachesubf 36 subf;
+	'A' Cachefont 40 sub;
+	'A' Image 44 cacheimage;
+};
+
+defn
+Font(addr) {
+	complex Font addr;
+	print("	name	", addr.name\X, "\n");
+	print("	display	", addr.display\X, "\n");
+	print("	height	", addr.height, "\n");
+	print("	ascent	", addr.ascent, "\n");
+	print("	width	", addr.width, "\n");
+	print("	nsub	", addr.nsub, "\n");
+	print("	age	", addr.age, "\n");
+	print("	maxdepth	", addr.maxdepth, "\n");
+	print("	ncache	", addr.ncache, "\n");
+	print("	nsubf	", addr.nsubf, "\n");
+	print("	cache	", addr.cache\X, "\n");
+	print("	subf	", addr.subf\X, "\n");
+	print("	sub	", addr.sub\X, "\n");
+	print("	cacheimage	", addr.cacheimage\X, "\n");
+};
+
+complex Point ZP;
+complex Rectangle ZR;
+complex Display display;
+complex Font font;
+complex Image screen;
+complex Screen _screen;
+sizeofMemdata = 20;
+aggr Memdata
+{
+	'X' 0 base;
+	'X' 4 bdata;
+	'D' 8 ref;
+	'X' 12 imref;
+	'D' 16 allocd;
+};
+
+defn
+Memdata(addr) {
+	complex Memdata addr;
+	print("	base	", addr.base\X, "\n");
+	print("	bdata	", addr.bdata\X, "\n");
+	print("	ref	", addr.ref, "\n");
+	print("	imref	", addr.imref\X, "\n");
+	print("	allocd	", addr.allocd, "\n");
+};
+
+Frepl = 1;
+Fsimple = 2;
+Fgrey = 4;
+Falpha = 8;
+Fcmap = 16;
+Fbytes = 32;
+sizeofMemimage = 152;
+aggr Memimage
+{
+	Rectangle 0 r;
+	Rectangle 16 clipr;
+	'D' 32 depth;
+	'D' 36 nchan;
+	'U' 40 chan;
+	'X' 44 cmap;
+	'A' Memdata 48 data;
+	'D' 52 zero;
+	'U' 56 width;
+	'X' 60 layer;
+	'U' 64 flags;
+	'a' 68 shift;
+	'a' 96 mask;
+	'a' 124 nbits;
+};
+
+defn
+Memimage(addr) {
+	complex Memimage addr;
+	print("Rectangle r {\n");
+	Rectangle(addr.r);
+	print("}\n");
+	print("Rectangle clipr {\n");
+	Rectangle(addr.clipr);
+	print("}\n");
+	print("	depth	", addr.depth, "\n");
+	print("	nchan	", addr.nchan, "\n");
+	print("	chan	", addr.chan, "\n");
+	print("	cmap	", addr.cmap\X, "\n");
+	print("	data	", addr.data\X, "\n");
+	print("	zero	", addr.zero, "\n");
+	print("	width	", addr.width, "\n");
+	print("	layer	", addr.layer\X, "\n");
+	print("	flags	", addr.flags, "\n");
+	print("	shift	", addr.shift, "\n");
+	print("	mask	", addr.mask, "\n");
+	print("	nbits	", addr.nbits, "\n");
+};
+
+sizeofMemcmap = 4864;
+aggr Memcmap
+{
+	'a' 0 cmap2rgb;
+	'a' 768 rgb2cmap;
+};
+
+defn
+Memcmap(addr) {
+	complex Memcmap addr;
+	print("	cmap2rgb	", addr.cmap2rgb, "\n");
+	print("	rgb2cmap	", addr.rgb2cmap, "\n");
+};
+
+sizeofMemsubfont = 16;
+aggr Memsubfont
+{
+	'X' 0 name;
+	'd' 4 n;
+	'b' 6 height;
+	'C' 7 ascent;
+	'A' Fontchar 8 info;
+	'A' Memimage 12 bits;
+};
+
+defn
+Memsubfont(addr) {
+	complex Memsubfont addr;
+	print("	name	", addr.name\X, "\n");
+	print("	n	", addr.n, "\n");
+	print("	height	", addr.height, "\n");
+	print("	ascent	", addr.ascent, "\n");
+	print("	info	", addr.info\X, "\n");
+	print("	bits	", addr.bits\X, "\n");
+};
+
+Simplesrc = 1;
+Simplemask = 2;
+Replsrc = 4;
+Replmask = 8;
+Fullmask = 16;
+sizeofMemdrawparam = 88;
+aggr Memdrawparam
+{
+	'A' Memimage 0 dst;
+	Rectangle 4 r;
+	'A' Memimage 20 src;
+	Rectangle 24 sr;
+	'A' Memimage 40 mask;
+	Rectangle 44 mr;
+	'D' 60 op;
+	'U' 64 state;
+	'U' 68 mval;
+	'U' 72 mrgba;
+	'U' 76 sval;
+	'U' 80 srgba;
+	'U' 84 sdval;
+};
+
+defn
+Memdrawparam(addr) {
+	complex Memdrawparam addr;
+	print("	dst	", addr.dst\X, "\n");
+	print("Rectangle r {\n");
+	Rectangle(addr.r);
+	print("}\n");
+	print("	src	", addr.src\X, "\n");
+	print("Rectangle sr {\n");
+	Rectangle(addr.sr);
+	print("}\n");
+	print("	mask	", addr.mask\X, "\n");
+	print("Rectangle mr {\n");
+	Rectangle(addr.mr);
+	print("}\n");
+	print("	op	", addr.op, "\n");
+	print("	state	", addr.state, "\n");
+	print("	mval	", addr.mval, "\n");
+	print("	mrgba	", addr.mrgba, "\n");
+	print("	sval	", addr.sval, "\n");
+	print("	srgba	", addr.srgba, "\n");
+	print("	sdval	", addr.sdval, "\n");
+};
+
+complex Memimage memwhite;
+complex Memimage memblack;
+complex Memimage memopaque;
+complex Memimage memtransparent;
+complex Memcmap memdefcmap;
+Nqwds = 2;
+Nqshift = 5;
+Nqmask = -1;
+Nqbits = 64;
+sizeofChannel = 32;
+aggr Channel
+{
+	'D' 0 s;
+	'U' 4 f;
+	'U' 8 n;
+	'D' 12 e;
+	'D' 16 freed;
+	'X' 20 qentry;
+	'D' 24 nentry;
+	'a' 28 v;
+};
+
+defn
+Channel(addr) {
+	complex Channel addr;
+	print("	s	", addr.s, "\n");
+	print("	f	", addr.f, "\n");
+	print("	n	", addr.n, "\n");
+	print("	e	", addr.e, "\n");
+	print("	freed	", addr.freed, "\n");
+	print("	qentry	", addr.qentry\X, "\n");
+	print("	nentry	", addr.nentry, "\n");
+	print("	v	", addr.v, "\n");
+};
+
+CHANEND = 0;
+CHANSND = 1;
+CHANRCV = 2;
+CHANNOP = 3;
+CHANNOBLK = 4;
+sizeofAlt = 20;
+aggr Alt
+{
+	'A' Channel 0 c;
+	'X' 4 v;
+	'D' 8 op;
+	'A' Channel 12 tag;
+	'D' 16 entryno;
+};
+
+defn
+Alt(addr) {
+	complex Alt addr;
+	print("	c	", addr.c\X, "\n");
+	print("	v	", addr.v\X, "\n");
+	print("	op	", addr.op, "\n");
+	print("	tag	", addr.tag\X, "\n");
+	print("	entryno	", addr.entryno, "\n");
+};
+
+sizeofRef = 4;
+aggr Ref
+{
+	'D' 0 ref;
+};
+
+defn
+Ref(addr) {
+	complex Ref addr;
+	print("	ref	", addr.ref, "\n");
+};
+
+sizeofMouse = 16;
+aggr Mouse
+{
+	'D' 0 buttons;
+	Point 4 xy;
+	'U' 12 msec;
+};
+
+defn
+Mouse(addr) {
+	complex Mouse addr;
+	print("	buttons	", addr.buttons, "\n");
+	print("Point xy {\n");
+	Point(addr.xy);
+	print("}\n");
+	print("	msec	", addr.msec, "\n");
+};
+
+sizeofMousectl = 44;
+aggr Mousectl
+{
+	{
+	'D' 0 buttons;
+	Point 4 xy;
+	'U' 12 msec;
+	};
+	'A' Channel 16 c;
+	'A' Channel 20 resizec;
+	'X' 24 file;
+	'D' 28 mfd;
+	'D' 32 cfd;
+	'D' 36 pid;
+	'A' Image 40 image;
+};
+
+defn
+Mousectl(addr) {
+	complex Mousectl addr;
+	print("Mouse {\n");
+		Mouse(addr+0);
+	print("}\n");
+	print("	c	", addr.c\X, "\n");
+	print("	resizec	", addr.resizec\X, "\n");
+	print("	file	", addr.file\X, "\n");
+	print("	mfd	", addr.mfd, "\n");
+	print("	cfd	", addr.cfd, "\n");
+	print("	pid	", addr.pid, "\n");
+	print("	image	", addr.image\X, "\n");
+};
+
+sizeofMenu = 12;
+aggr Menu
+{
+	'X' 0 item;
+	'X' 4 gen;
+	'D' 8 lasthit;
+};
+
+defn
+Menu(addr) {
+	complex Menu addr;
+	print("	item	", addr.item\X, "\n");
+	print("	gen	", addr.gen\X, "\n");
+	print("	lasthit	", addr.lasthit, "\n");
+};
+
+sizeofKeyboardctl = 20;
+aggr Keyboardctl
+{
+	'A' Channel 0 c;
+	'X' 4 file;
+	'D' 8 consfd;
+	'D' 12 ctlfd;
+	'D' 16 pid;
+};
+
+defn
+Keyboardctl(addr) {
+	complex Keyboardctl addr;
+	print("	c	", addr.c\X, "\n");
+	print("	file	", addr.file\X, "\n");
+	print("	consfd	", addr.consfd, "\n");
+	print("	ctlfd	", addr.ctlfd, "\n");
+	print("	pid	", addr.pid, "\n");
+};
+
+KF = 61440;
+Spec = 63488;
+Khome = 61453;
+Kup = 61454;
+Kpgup = 61455;
+Kprint = 61456;
+Kleft = 61457;
+Kright = 61458;
+Kdown = 63488;
+Kview = 63488;
+Kpgdown = 61459;
+Kins = 61460;
+Kend = 61464;
+Kalt = 61461;
+Kshift = 61462;
+Kctl = 61463;
+Kbs = 8;
+Kdel = 127;
+Kesc = 27;
+Keof = 4;
+sizeofCursor = 72;
+aggr Cursor
+{
+	Point 0 offset;
+	'a' 8 clr;
+	'a' 40 set;
+};
+
+defn
+Cursor(addr) {
+	complex Cursor addr;
+	print("Point offset {\n");
+	Point(addr.offset);
+	print("}\n");
+	print("	clr	", addr.clr, "\n");
+	print("	set	", addr.set, "\n");
+};
+
+BACK = 0;
+HIGH = 1;
+BORD = 2;
+TEXT = 3;
+HTEXT = 4;
+NCOL = 5;
+sizeof_2_ = 4;
+aggr _2_
+{
+	'd' 0 bc;
+	'd' 2 minwid;
+};
+
+defn
+_2_(addr) {
+	complex _2_ addr;
+	print("	bc	", addr.bc, "\n");
+	print("	minwid	", addr.minwid, "\n");
+};
+
+sizeof_3_ = 4;
+aggr _3_
+{
+	'X' 0 ptr;
+	{
+	'd' 0 bc;
+	'd' 2 minwid;
+	};
+};
+
+defn
+_3_(addr) {
+	complex _3_ addr;
+	print("	ptr	", addr.ptr\X, "\n");
+	print("_2_ {\n");
+		_2_(addr+0);
+	print("}\n");
+};
+
+sizeofFrbox = 12;
+aggr Frbox
+{
+	'D' 0 wid;
+	'D' 4 nrune;
+	{
+	'X' 8 ptr;
+	{
+	'd' 8 bc;
+	'd' 10 minwid;
+	};
+	};
+};
+
+defn
+Frbox(addr) {
+	complex Frbox addr;
+	print("	wid	", addr.wid, "\n");
+	print("	nrune	", addr.nrune, "\n");
+	print("_3_ {\n");
+		_3_(addr+8);
+	print("}\n");
+};
+
+complex Font font;
+complex Display display;
+sizeofFrame = 108;
+aggr Frame
+{
+	'A' Font 0 font;
+	'A' Display 4 display;
+	'A' Image 8 b;
+	'a' 12 cols;
+	Rectangle 32 r;
+	Rectangle 48 entire;
+	'X' 64 scroll;
+	'A' Frbox 68 box;
+	'U' 72 p0;
+	'U' 76 p1;
+	'u' 80 nbox;
+	'u' 82 nalloc;
+	'u' 84 maxtab;
+	'u' 86 nchars;
+	'u' 88 nlines;
+	'u' 90 maxlines;
+	'u' 92 lastlinefull;
+	'u' 94 modified;
+	'A' Image 96 tick;
+	'A' Image 100 tickback;
+	'D' 104 ticked;
+};
+
+defn
+Frame(addr) {
+	complex Frame addr;
+	print("	font	", addr.font\X, "\n");
+	print("	display	", addr.display\X, "\n");
+	print("	b	", addr.b\X, "\n");
+	print("	cols	", addr.cols, "\n");
+	print("Rectangle r {\n");
+	Rectangle(addr.r);
+	print("}\n");
+	print("Rectangle entire {\n");
+	Rectangle(addr.entire);
+	print("}\n");
+	print("	scroll	", addr.scroll\X, "\n");
+	print("	box	", addr.box\X, "\n");
+	print("	p0	", addr.p0, "\n");
+	print("	p1	", addr.p1, "\n");
+	print("	nbox	", addr.nbox, "\n");
+	print("	nalloc	", addr.nalloc, "\n");
+	print("	maxtab	", addr.maxtab, "\n");
+	print("	nchars	", addr.nchars, "\n");
+	print("	nlines	", addr.nlines, "\n");
+	print("	maxlines	", addr.maxlines, "\n");
+	print("	lastlinefull	", addr.lastlinefull, "\n");
+	print("	modified	", addr.modified, "\n");
+	print("	tick	", addr.tick\X, "\n");
+	print("	tickback	", addr.tickback\X, "\n");
+	print("	ticked	", addr.ticked, "\n");
+};
+
+sizeof_4_ = 4;
+aggr _4_
+{
+	'X' 0 sp;
+	'X' 0 rsp;
+};
+
+defn
+_4_(addr) {
+	complex _4_ addr;
+	print("	sp	", addr.sp\X, "\n");
+	print("	rsp	", addr.rsp\X, "\n");
+};
+
+sizeof_5_ = 4;
+aggr _5_
+{
+	'X' 0 ep;
+	'X' 0 rep;
+};
+
+defn
+_5_(addr) {
+	complex _5_ addr;
+	print("	ep	", addr.ep\X, "\n");
+	print("	rep	", addr.rep\X, "\n");
+};
+
+sizeofResub = 8;
+aggr Resub
+{
+	{
+	'X' 0 sp;
+	'X' 0 rsp;
+	};
+	{
+	'X' 4 ep;
+	'X' 4 rep;
+	};
+};
+
+defn
+Resub(addr) {
+	complex Resub addr;
+	print("_4_ {\n");
+		_4_(addr+0);
+	print("}\n");
+	print("_5_ {\n");
+		_5_(addr+4);
+	print("}\n");
+};
+
+sizeofReclass = 132;
+aggr Reclass
+{
+	'X' 0 end;
+	'a' 4 spans;
+};
+
+defn
+Reclass(addr) {
+	complex Reclass addr;
+	print("	end	", addr.end\X, "\n");
+	print("	spans	", addr.spans, "\n");
+};
+
+sizeof_6_ = 4;
+aggr _6_
+{
+	'A' Reclass 0 cp;
+	'u' 0 r;
+	'D' 0 subid;
+	'X' 0 right;
+};
+
+defn
+_6_(addr) {
+	complex _6_ addr;
+	print("	cp	", addr.cp\X, "\n");
+	print("	r	", addr.r, "\n");
+	print("	subid	", addr.subid, "\n");
+	print("	right	", addr.right\X, "\n");
+};
+
+sizeof_7_ = 4;
+aggr _7_
+{
+	'X' 0 left;
+	'X' 0 next;
+};
+
+defn
+_7_(addr) {
+	complex _7_ addr;
+	print("	left	", addr.left\X, "\n");
+	print("	next	", addr.next\X, "\n");
+};
+
+sizeofReinst = 12;
+aggr Reinst
+{
+	'D' 0 type;
+	{
+	'A' Reclass 4 cp;
+	'u' 4 r;
+	'D' 4 subid;
+	'A' Reinst 4 right;
+	};
+	{
+	'A' Reinst 8 left;
+	'A' Reinst 8 next;
+	};
+};
+
+defn
+Reinst(addr) {
+	complex Reinst addr;
+	print("	type	", addr.type, "\n");
+	print("_6_ {\n");
+		_6_(addr+4);
+	print("}\n");
+	print("_7_ {\n");
+		_7_(addr+8);
+	print("}\n");
+};
+
+sizeofReprog = 2176;
+aggr Reprog
+{
+	'A' Reinst 0 startinst;
+	'a' 4 class;
+	'a' 2116 firstinst;
+};
+
+defn
+Reprog(addr) {
+	complex Reprog addr;
+	print("	startinst	", addr.startinst\X, "\n");
+	print("	class	", addr.class, "\n");
+	print("	firstinst	", addr.firstinst, "\n");
+};
+
+sizeofPlumbmsg = 28;
+aggr Plumbmsg
+{
+	'X' 0 src;
+	'X' 4 dst;
+	'X' 8 wdir;
+	'X' 12 type;
+	'X' 16 attr;
+	'D' 20 ndata;
+	'X' 24 data;
+};
+
+defn
+Plumbmsg(addr) {
+	complex Plumbmsg addr;
+	print("	src	", addr.src\X, "\n");
+	print("	dst	", addr.dst\X, "\n");
+	print("	wdir	", addr.wdir\X, "\n");
+	print("	type	", addr.type\X, "\n");
+	print("	attr	", addr.attr\X, "\n");
+	print("	ndata	", addr.ndata, "\n");
+	print("	data	", addr.data\X, "\n");
+};
+
+sizeofPlumbattr = 12;
+aggr Plumbattr
+{
+	'X' 0 name;
+	'X' 4 value;
+	'A' Plumbattr 8 next;
+};
+
+defn
+Plumbattr(addr) {
+	complex Plumbattr addr;
+	print("	name	", addr.name\X, "\n");
+	print("	value	", addr.value\X, "\n");
+	print("	next	", addr.next\X, "\n");
+};
+
+ApplMsword = 0;
+ApplOctets = 1;
+ApplPdf = 2;
+ApplPostscript = 3;
+ApplRtf = 4;
+ApplFramemaker = 5;
+ApplMsexcel = 6;
+ApplMspowerpoint = 7;
+UnknownType = 8;
+Audio32kadpcm = 9;
+AudioBasic = 10;
+ImageCgm = 11;
+ImageG3fax = 12;
+ImageGif = 13;
+ImageIef = 14;
+ImageJpeg = 15;
+ImagePng = 16;
+ImageTiff = 17;
+ImageXBit = 18;
+ImageXBit2 = 19;
+ImageXBitmulti = 20;
+ImageXXBitmap = 21;
+ModelVrml = 22;
+MultiDigest = 23;
+MultiMixed = 24;
+TextCss = 25;
+TextEnriched = 26;
+TextHtml = 27;
+TextJavascript = 28;
+TextPlain = 29;
+TextRichtext = 30;
+TextSgml = 31;
+TextTabSeparatedValues = 32;
+TextXml = 33;
+VideoMpeg = 34;
+VideoQuicktime = 35;
+NMEDIATYPES = 36;
+HGet = 0;
+HPost = 1;
+UnknownCharset = 0;
+US_Ascii = 1;
+ISO_8859_1 = 2;
+UTF_8 = 3;
+Unicode = 4;
+NCHARSETS = 5;
+FTtop = 0;
+FTself = 1;
+FTparent = 2;
+FTblank = 3;
+ALnone = 0;
+ALleft = 1;
+ALcenter = 2;
+ALright = 3;
+ALjustify = 4;
+ALchar = 5;
+ALtop = 6;
+ALmiddle = 7;
+ALbottom = 8;
+ALbaseline = 9;
+sizeofAlign = 4;
+aggr Align
+{
+	'b' 0 halign;
+	'b' 1 valign;
+};
+
+defn
+Align(addr) {
+	complex Align addr;
+	print("	halign	", addr.halign, "\n");
+	print("	valign	", addr.valign, "\n");
+};
+
+Dnone = 0;
+Dpixels = 536870912;
+Dpercent = 1073741824;
+Drelative = 1610612736;
+Dkindmask = 1610612736;
+Dspecmask = -1610612737;
+sizeofDimen = 4;
+aggr Dimen
+{
+	'D' 0 kindspec;
+};
+
+defn
+Dimen(addr) {
+	complex Dimen addr;
+	print("	kindspec	", addr.kindspec, "\n");
+};
+
+sizeofBackground = 8;
+aggr Background
+{
+	'X' 0 image;
+	'D' 4 color;
+};
+
+defn
+Background(addr) {
+	complex Background addr;
+	print("	image	", addr.image\X, "\n");
+	print("	color	", addr.color, "\n");
+};
+
+sizeofItem = 32;
+aggr Item
+{
+	'A' Item 0 next;
+	'D' 4 width;
+	'D' 8 height;
+	'D' 12 ascent;
+	'D' 16 anchorid;
+	'D' 20 state;
+	'X' 24 genattr;
+	'D' 28 tag;
+};
+
+defn
+Item(addr) {
+	complex Item addr;
+	print("	next	", addr.next\X, "\n");
+	print("	width	", addr.width, "\n");
+	print("	height	", addr.height, "\n");
+	print("	ascent	", addr.ascent, "\n");
+	print("	anchorid	", addr.anchorid, "\n");
+	print("	state	", addr.state, "\n");
+	print("	genattr	", addr.genattr\X, "\n");
+	print("	tag	", addr.tag, "\n");
+};
+
+Itexttag = 0;
+Iruletag = 1;
+Iimagetag = 2;
+Iformfieldtag = 3;
+Itabletag = 4;
+Ifloattag = 5;
+Ispacertag = 6;
+sizeofItext = 48;
+aggr Itext
+{
+	{
+	'A' Item 0 next;
+	'D' 4 width;
+	'D' 8 height;
+	'D' 12 ascent;
+	'D' 16 anchorid;
+	'D' 20 state;
+	'X' 24 genattr;
+	'D' 28 tag;
+	};
+	'X' 32 s;
+	'D' 36 fnt;
+	'D' 40 fg;
+	'b' 44 voff;
+	'b' 45 ul;
+};
+
+defn
+Itext(addr) {
+	complex Itext addr;
+	print("Item {\n");
+		Item(addr+0);
+	print("}\n");
+	print("	s	", addr.s\X, "\n");
+	print("	fnt	", addr.fnt, "\n");
+	print("	fg	", addr.fg, "\n");
+	print("	voff	", addr.voff, "\n");
+	print("	ul	", addr.ul, "\n");
+};
+
+sizeofIrule = 44;
+aggr Irule
+{
+	{
+	'A' Item 0 next;
+	'D' 4 width;
+	'D' 8 height;
+	'D' 12 ascent;
+	'D' 16 anchorid;
+	'D' 20 state;
+	'X' 24 genattr;
+	'D' 28 tag;
+	};
+	'b' 32 align;
+	'b' 33 noshade;
+	'D' 36 size;
+	Dimen 40 wspec;
+};
+
+defn
+Irule(addr) {
+	complex Irule addr;
+	print("Item {\n");
+		Item(addr+0);
+	print("}\n");
+	print("	align	", addr.align, "\n");
+	print("	noshade	", addr.noshade, "\n");
+	print("	size	", addr.size, "\n");
+	print("Dimen wspec {\n");
+	Dimen(addr.wspec);
+	print("}\n");
+};
+
+sizeofIimage = 68;
+aggr Iimage
+{
+	{
+	'A' Item 0 next;
+	'D' 4 width;
+	'D' 8 height;
+	'D' 12 ascent;
+	'D' 16 anchorid;
+	'D' 20 state;
+	'X' 24 genattr;
+	'D' 28 tag;
+	};
+	'X' 32 imsrc;
+	'D' 36 imwidth;
+	'D' 40 imheight;
+	'X' 44 altrep;
+	'X' 48 map;
+	'D' 52 ctlid;
+	'b' 56 align;
+	'b' 57 hspace;
+	'b' 58 vspace;
+	'b' 59 border;
+	'A' Iimage 60 nextimage;
+	'X' 64 aux;
+};
+
+defn
+Iimage(addr) {
+	complex Iimage addr;
+	print("Item {\n");
+		Item(addr+0);
+	print("}\n");
+	print("	imsrc	", addr.imsrc\X, "\n");
+	print("	imwidth	", addr.imwidth, "\n");
+	print("	imheight	", addr.imheight, "\n");
+	print("	altrep	", addr.altrep\X, "\n");
+	print("	map	", addr.map\X, "\n");
+	print("	ctlid	", addr.ctlid, "\n");
+	print("	align	", addr.align, "\n");
+	print("	hspace	", addr.hspace, "\n");
+	print("	vspace	", addr.vspace, "\n");
+	print("	border	", addr.border, "\n");
+	print("	nextimage	", addr.nextimage\X, "\n");
+	print("	aux	", addr.aux\X, "\n");
+};
+
+sizeofIformfield = 40;
+aggr Iformfield
+{
+	{
+	'A' Item 0 next;
+	'D' 4 width;
+	'D' 8 height;
+	'D' 12 ascent;
+	'D' 16 anchorid;
+	'D' 20 state;
+	'X' 24 genattr;
+	'D' 28 tag;
+	};
+	'X' 32 formfield;
+	'X' 36 aux;
+};
+
+defn
+Iformfield(addr) {
+	complex Iformfield addr;
+	print("Item {\n");
+		Item(addr+0);
+	print("}\n");
+	print("	formfield	", addr.formfield\X, "\n");
+	print("	aux	", addr.aux\X, "\n");
+};
+
+sizeofItable = 36;
+aggr Itable
+{
+	{
+	'A' Item 0 next;
+	'D' 4 width;
+	'D' 8 height;
+	'D' 12 ascent;
+	'D' 16 anchorid;
+	'D' 20 state;
+	'X' 24 genattr;
+	'D' 28 tag;
+	};
+	'X' 32 table;
+};
+
+defn
+Itable(addr) {
+	complex Itable addr;
+	print("Item {\n");
+		Item(addr+0);
+	print("}\n");
+	print("	table	", addr.table\X, "\n");
+};
+
+sizeofIfloat = 52;
+aggr Ifloat
+{
+	{
+	'A' Item 0 next;
+	'D' 4 width;
+	'D' 8 height;
+	'D' 12 ascent;
+	'D' 16 anchorid;
+	'D' 20 state;
+	'X' 24 genattr;
+	'D' 28 tag;
+	};
+	'A' Item 32 item;
+	'D' 36 x;
+	'D' 40 y;
+	'b' 44 side;
+	'b' 45 infloats;
+	'A' Ifloat 48 nextfloat;
+};
+
+defn
+Ifloat(addr) {
+	complex Ifloat addr;
+	print("Item {\n");
+		Item(addr+0);
+	print("}\n");
+	print("	item	", addr.item\X, "\n");
+	print("	x	", addr.x, "\n");
+	print("	y	", addr.y, "\n");
+	print("	side	", addr.side, "\n");
+	print("	infloats	", addr.infloats, "\n");
+	print("	nextfloat	", addr.nextfloat\X, "\n");
+};
+
+sizeofIspacer = 36;
+aggr Ispacer
+{
+	{
+	'A' Item 0 next;
+	'D' 4 width;
+	'D' 8 height;
+	'D' 12 ascent;
+	'D' 16 anchorid;
+	'D' 20 state;
+	'X' 24 genattr;
+	'D' 28 tag;
+	};
+	'D' 32 spkind;
+};
+
+defn
+Ispacer(addr) {
+	complex Ispacer addr;
+	print("Item {\n");
+		Item(addr+0);
+	print("}\n");
+	print("	spkind	", addr.spkind, "\n");
+};
+
+IFbrk = 2147483648;
+IFbrksp = 1073741824;
+IFnobrk = 536870912;
+IFcleft = 268435456;
+IFcright = 134217728;
+IFwrap = 67108864;
+IFhang = 33554432;
+IFrjust = 16777216;
+IFcjust = 8388608;
+IFsmap = 4194304;
+IFindentshift = 8;
+IFindentmask = 65280;
+IFhangmask = 255;
+Voffbias = 128;
+ISPnull = 0;
+ISPvline = 1;
+ISPhspace = 2;
+ISPgeneral = 3;
+sizeofGenattr = 20;
+aggr Genattr
+{
+	'X' 0 id;
+	'X' 4 class;
+	'X' 8 style;
+	'X' 12 title;
+	'X' 16 events;
+};
+
+defn
+Genattr(addr) {
+	complex Genattr addr;
+	print("	id	", addr.id\X, "\n");
+	print("	class	", addr.class\X, "\n");
+	print("	style	", addr.style\X, "\n");
+	print("	title	", addr.title\X, "\n");
+	print("	events	", addr.events\X, "\n");
+};
+
+sizeofSEvent = 12;
+aggr SEvent
+{
+	'A' SEvent 0 next;
+	'D' 4 type;
+	'X' 8 script;
+};
+
+defn
+SEvent(addr) {
+	complex SEvent addr;
+	print("	next	", addr.next\X, "\n");
+	print("	type	", addr.type, "\n");
+	print("	script	", addr.script\X, "\n");
+};
+
+SEonblur = 0;
+SEonchange = 1;
+SEonclick = 2;
+SEondblclick = 3;
+SEonfocus = 4;
+SEonkeypress = 5;
+SEonkeyup = 6;
+SEonload = 7;
+SEonmousedown = 8;
+SEonmousemove = 9;
+SEonmouseout = 10;
+SEonmouseover = 11;
+SEonmouseup = 12;
+SEonreset = 13;
+SEonselect = 14;
+SEonsubmit = 15;
+SEonunload = 16;
+Numscriptev = 17;
+Ftext = 0;
+Fpassword = 1;
+Fcheckbox = 2;
+Fradio = 3;
+Fsubmit = 4;
+Fhidden = 5;
+Fimage = 6;
+Freset = 7;
+Ffile = 8;
+Fbutton = 9;
+Fselect = 10;
+Ftextarea = 11;
+sizeofFormfield = 60;
+aggr Formfield
+{
+	'A' Formfield 0 next;
+	'D' 4 ftype;
+	'D' 8 fieldid;
+	'X' 12 form;
+	'X' 16 name;
+	'X' 20 value;
+	'D' 24 size;
+	'D' 28 maxlength;
+	'D' 32 rows;
+	'D' 36 cols;
+	'b' 40 flags;
+	'X' 44 options;
+	'A' Item 48 image;
+	'D' 52 ctlid;
+	'A' SEvent 56 events;
+};
+
+defn
+Formfield(addr) {
+	complex Formfield addr;
+	print("	next	", addr.next\X, "\n");
+	print("	ftype	", addr.ftype, "\n");
+	print("	fieldid	", addr.fieldid, "\n");
+	print("	form	", addr.form\X, "\n");
+	print("	name	", addr.name\X, "\n");
+	print("	value	", addr.value\X, "\n");
+	print("	size	", addr.size, "\n");
+	print("	maxlength	", addr.maxlength, "\n");
+	print("	rows	", addr.rows, "\n");
+	print("	cols	", addr.cols, "\n");
+	print("	flags	", addr.flags, "\n");
+	print("	options	", addr.options\X, "\n");
+	print("	image	", addr.image\X, "\n");
+	print("	ctlid	", addr.ctlid, "\n");
+	print("	events	", addr.events\X, "\n");
+};
+
+FFchecked = 128;
+FFmultiple = 64;
+complex Display display;
+sizeofOption = 16;
+aggr Option
+{
+	'A' Option 0 next;
+	'D' 4 selected;
+	'X' 8 value;
+	'X' 12 display;
+};
+
+defn
+Option(addr) {
+	complex Option addr;
+	print("	next	", addr.next\X, "\n");
+	print("	selected	", addr.selected, "\n");
+	print("	value	", addr.value\X, "\n");
+	print("	display	", addr.display\X, "\n");
+};
+
+sizeofForm = 32;
+aggr Form
+{
+	'A' Form 0 next;
+	'D' 4 formid;
+	'X' 8 name;
+	'X' 12 action;
+	'D' 16 target;
+	'D' 20 method;
+	'D' 24 nfields;
+	'A' Formfield 28 fields;
+};
+
+defn
+Form(addr) {
+	complex Form addr;
+	print("	next	", addr.next\X, "\n");
+	print("	formid	", addr.formid, "\n");
+	print("	name	", addr.name\X, "\n");
+	print("	action	", addr.action\X, "\n");
+	print("	target	", addr.target, "\n");
+	print("	method	", addr.method, "\n");
+	print("	nfields	", addr.nfields, "\n");
+	print("	fields	", addr.fields\X, "\n");
+};
+
+TFparsing = 128;
+TFnowrap = 64;
+TFisth = 32;
+sizeofTable = 100;
+aggr Table
+{
+	'A' Table 0 next;
+	'D' 4 tableid;
+	'X' 8 rows;
+	'D' 12 nrow;
+	'X' 16 cols;
+	'D' 20 ncol;
+	'X' 24 cells;
+	'D' 28 ncell;
+	'X' 32 grid;
+	Align 36 align;
+	Dimen 40 width;
+	'D' 44 border;
+	'D' 48 cellspacing;
+	'D' 52 cellpadding;
+	Background 56 background;
+	'A' Item 64 caption;
+	'b' 68 caption_place;
+	'X' 72 caption_lay;
+	'D' 76 totw;
+	'D' 80 toth;
+	'D' 84 caph;
+	'D' 88 availw;
+	'X' 92 tabletok;
+	'b' 96 flags;
+};
+
+defn
+Table(addr) {
+	complex Table addr;
+	print("	next	", addr.next\X, "\n");
+	print("	tableid	", addr.tableid, "\n");
+	print("	rows	", addr.rows\X, "\n");
+	print("	nrow	", addr.nrow, "\n");
+	print("	cols	", addr.cols\X, "\n");
+	print("	ncol	", addr.ncol, "\n");
+	print("	cells	", addr.cells\X, "\n");
+	print("	ncell	", addr.ncell, "\n");
+	print("	grid	", addr.grid\X, "\n");
+	print("Align align {\n");
+	Align(addr.align);
+	print("}\n");
+	print("Dimen width {\n");
+	Dimen(addr.width);
+	print("}\n");
+	print("	border	", addr.border, "\n");
+	print("	cellspacing	", addr.cellspacing, "\n");
+	print("	cellpadding	", addr.cellpadding, "\n");
+	print("Background background {\n");
+	Background(addr.background);
+	print("}\n");
+	print("	caption	", addr.caption\X, "\n");
+	print("	caption_place	", addr.caption_place, "\n");
+	print("	caption_lay	", addr.caption_lay\X, "\n");
+	print("	totw	", addr.totw, "\n");
+	print("	toth	", addr.toth, "\n");
+	print("	caph	", addr.caph, "\n");
+	print("	availw	", addr.availw, "\n");
+	print("	tabletok	", addr.tabletok\X, "\n");
+	print("	flags	", addr.flags, "\n");
+};
+
+sizeofTablecol = 16;
+aggr Tablecol
+{
+	'D' 0 width;
+	Align 4 align;
+	Point 8 pos;
+};
+
+defn
+Tablecol(addr) {
+	complex Tablecol addr;
+	print("	width	", addr.width, "\n");
+	print("Align align {\n");
+	Align(addr.align);
+	print("}\n");
+	print("Point pos {\n");
+	Point(addr.pos);
+	print("}\n");
+};
+
+sizeofTablerow = 40;
+aggr Tablerow
+{
+	'A' Tablerow 0 next;
+	'X' 4 cells;
+	'D' 8 height;
+	'D' 12 ascent;
+	Align 16 align;
+	Background 20 background;
+	Point 28 pos;
+	'b' 36 flags;
+};
+
+defn
+Tablerow(addr) {
+	complex Tablerow addr;
+	print("	next	", addr.next\X, "\n");
+	print("	cells	", addr.cells\X, "\n");
+	print("	height	", addr.height, "\n");
+	print("	ascent	", addr.ascent, "\n");
+	print("Align align {\n");
+	Align(addr.align);
+	print("}\n");
+	print("Background background {\n");
+	Background(addr.background);
+	print("}\n");
+	print("Point pos {\n");
+	Point(addr.pos);
+	print("}\n");
+	print("	flags	", addr.flags, "\n");
+};
+
+sizeofTablecell = 80;
+aggr Tablecell
+{
+	'A' Tablecell 0 next;
+	'A' Tablecell 4 nextinrow;
+	'D' 8 cellid;
+	'A' Item 12 content;
+	'X' 16 lay;
+	'D' 20 rowspan;
+	'D' 24 colspan;
+	Align 28 align;
+	'b' 32 flags;
+	Dimen 36 wspec;
+	'D' 40 hspec;
+	Background 44 background;
+	'D' 52 minw;
+	'D' 56 maxw;
+	'D' 60 ascent;
+	'D' 64 row;
+	'D' 68 col;
+	Point 72 pos;
+};
+
+defn
+Tablecell(addr) {
+	complex Tablecell addr;
+	print("	next	", addr.next\X, "\n");
+	print("	nextinrow	", addr.nextinrow\X, "\n");
+	print("	cellid	", addr.cellid, "\n");
+	print("	content	", addr.content\X, "\n");
+	print("	lay	", addr.lay\X, "\n");
+	print("	rowspan	", addr.rowspan, "\n");
+	print("	colspan	", addr.colspan, "\n");
+	print("Align align {\n");
+	Align(addr.align);
+	print("}\n");
+	print("	flags	", addr.flags, "\n");
+	print("Dimen wspec {\n");
+	Dimen(addr.wspec);
+	print("}\n");
+	print("	hspec	", addr.hspec, "\n");
+	print("Background background {\n");
+	Background(addr.background);
+	print("}\n");
+	print("	minw	", addr.minw, "\n");
+	print("	maxw	", addr.maxw, "\n");
+	print("	ascent	", addr.ascent, "\n");
+	print("	row	", addr.row, "\n");
+	print("	col	", addr.col, "\n");
+	print("Point pos {\n");
+	Point(addr.pos);
+	print("}\n");
+};
+
+sizeofAnchor = 20;
+aggr Anchor
+{
+	'A' Anchor 0 next;
+	'D' 4 index;
+	'X' 8 name;
+	'X' 12 href;
+	'D' 16 target;
+};
+
+defn
+Anchor(addr) {
+	complex Anchor addr;
+	print("	next	", addr.next\X, "\n");
+	print("	index	", addr.index, "\n");
+	print("	name	", addr.name\X, "\n");
+	print("	href	", addr.href\X, "\n");
+	print("	target	", addr.target, "\n");
+};
+
+sizeofDestAnchor = 16;
+aggr DestAnchor
+{
+	'A' DestAnchor 0 next;
+	'D' 4 index;
+	'X' 8 name;
+	'A' Item 12 item;
+};
+
+defn
+DestAnchor(addr) {
+	complex DestAnchor addr;
+	print("	next	", addr.next\X, "\n");
+	print("	index	", addr.index, "\n");
+	print("	name	", addr.name\X, "\n");
+	print("	item	", addr.item\X, "\n");
+};
+
+sizeofMap = 12;
+aggr Map
+{
+	'A' Map 0 next;
+	'X' 4 name;
+	'X' 8 areas;
+};
+
+defn
+Map(addr) {
+	complex Map addr;
+	print("	next	", addr.next\X, "\n");
+	print("	name	", addr.name\X, "\n");
+	print("	areas	", addr.areas\X, "\n");
+};
+
+sizeofArea = 24;
+aggr Area
+{
+	'A' Area 0 next;
+	'D' 4 shape;
+	'X' 8 href;
+	'D' 12 target;
+	'A' Dimen 16 coords;
+	'D' 20 ncoords;
+};
+
+defn
+Area(addr) {
+	complex Area addr;
+	print("	next	", addr.next\X, "\n");
+	print("	shape	", addr.shape, "\n");
+	print("	href	", addr.href\X, "\n");
+	print("	target	", addr.target, "\n");
+	print("	coords	", addr.coords\X, "\n");
+	print("	ncoords	", addr.ncoords, "\n");
+};
+
+SHrect = 0;
+SHcircle = 1;
+SHpoly = 2;
+FntR = 0;
+FntI = 1;
+FntB = 2;
+FntT = 3;
+NumStyle = 4;
+Tiny = 0;
+Small = 1;
+Normal = 2;
+Large = 3;
+Verylarge = 4;
+NumSize = 5;
+NumFnt = 20;
+DefFnt = 2;
+ULnone = 0;
+ULunder = 1;
+ULmid = 2;
+FRnoresize = 1;
+FRnoscroll = 2;
+FRhscroll = 4;
+FRvscroll = 8;
+FRhscrollauto = 16;
+FRvscrollauto = 32;
+sizeofKidinfo = 56;
+aggr Kidinfo
+{
+	'A' Kidinfo 0 next;
+	'D' 4 isframeset;
+	'X' 8 src;
+	'X' 12 name;
+	'D' 16 marginw;
+	'D' 20 marginh;
+	'D' 24 framebd;
+	'D' 28 flags;
+	'A' Dimen 32 rows;
+	'D' 36 nrows;
+	'A' Dimen 40 cols;
+	'D' 44 ncols;
+	'A' Kidinfo 48 kidinfos;
+	'A' Kidinfo 52 nextframeset;
+};
+
+defn
+Kidinfo(addr) {
+	complex Kidinfo addr;
+	print("	next	", addr.next\X, "\n");
+	print("	isframeset	", addr.isframeset, "\n");
+	print("	src	", addr.src\X, "\n");
+	print("	name	", addr.name\X, "\n");
+	print("	marginw	", addr.marginw, "\n");
+	print("	marginh	", addr.marginh, "\n");
+	print("	framebd	", addr.framebd, "\n");
+	print("	flags	", addr.flags, "\n");
+	print("	rows	", addr.rows\X, "\n");
+	print("	nrows	", addr.nrows, "\n");
+	print("	cols	", addr.cols\X, "\n");
+	print("	ncols	", addr.ncols, "\n");
+	print("	kidinfos	", addr.kidinfos\X, "\n");
+	print("	nextframeset	", addr.nextframeset\X, "\n");
+};
+
+sizeofDocinfo = 96;
+aggr Docinfo
+{
+	'X' 0 src;
+	'X' 4 base;
+	'X' 8 doctitle;
+	Background 12 background;
+	'A' Iimage 20 backgrounditem;
+	'D' 24 text;
+	'D' 28 link;
+	'D' 32 vlink;
+	'D' 36 alink;
+	'D' 40 target;
+	'D' 44 chset;
+	'D' 48 mediatype;
+	'D' 52 scripttype;
+	'D' 56 hasscripts;
+	'X' 60 refresh;
+	'A' Kidinfo 64 kidinfo;
+	'D' 68 frameid;
+	'A' Anchor 72 anchors;
+	'A' DestAnchor 76 dests;
+	'A' Form 80 forms;
+	'A' Table 84 tables;
+	'A' Map 88 maps;
+	'A' Iimage 92 images;
+};
+
+defn
+Docinfo(addr) {
+	complex Docinfo addr;
+	print("	src	", addr.src\X, "\n");
+	print("	base	", addr.base\X, "\n");
+	print("	doctitle	", addr.doctitle\X, "\n");
+	print("Background background {\n");
+	Background(addr.background);
+	print("}\n");
+	print("	backgrounditem	", addr.backgrounditem\X, "\n");
+	print("	text	", addr.text, "\n");
+	print("	link	", addr.link, "\n");
+	print("	vlink	", addr.vlink, "\n");
+	print("	alink	", addr.alink, "\n");
+	print("	target	", addr.target, "\n");
+	print("	chset	", addr.chset, "\n");
+	print("	mediatype	", addr.mediatype, "\n");
+	print("	scripttype	", addr.scripttype, "\n");
+	print("	hasscripts	", addr.hasscripts, "\n");
+	print("	refresh	", addr.refresh\X, "\n");
+	print("	kidinfo	", addr.kidinfo\X, "\n");
+	print("	frameid	", addr.frameid, "\n");
+	print("	anchors	", addr.anchors\X, "\n");
+	print("	dests	", addr.dests\X, "\n");
+	print("	forms	", addr.forms\X, "\n");
+	print("	tables	", addr.tables\X, "\n");
+	print("	maps	", addr.maps\X, "\n");
+	print("	images	", addr.images\X, "\n");
+};
+
+sizeofRunestr = 8;
+aggr Runestr
+{
+	'X' 0 r;
+	'D' 4 nr;
+};
+
+defn
+Runestr(addr) {
+	complex Runestr addr;
+	print("	r	", addr.r\X, "\n");
+	print("	nr	", addr.nr, "\n");
+};
+
+Rowtag = 0;
+Columntag = 1;
+Tag = 2;
+Urltag = 3;
+Statustag = 4;
+Entry = 5;
+Textarea = 6;
+sizeofText = 192;
+aggr Text
+{
+	{
+	'A' Font 0 font;
+	'A' Display 4 display;
+	'A' Image 8 b;
+	'a' 12 cols;
+	Rectangle 32 r;
+	Rectangle 48 entire;
+	'X' 64 scroll;
+	'A' Frbox 68 box;
+	'U' 72 p0;
+	'U' 76 p1;
+	'u' 80 nbox;
+	'u' 82 nalloc;
+	'u' 84 maxtab;
+	'u' 86 nchars;
+	'u' 88 nlines;
+	'u' 90 maxlines;
+	'u' 92 lastlinefull;
+	'u' 94 modified;
+	'A' Image 96 tick;
+	'A' Image 100 tickback;
+	'D' 104 ticked;
+	};
+	'U' 108 org;
+	'U' 112 q0;
+	'U' 116 q1;
+	'D' 120 what;
+	'X' 124 w;
+	Rectangle 128 scrollr;
+	Rectangle 144 lastsr;
+	Rectangle 160 all;
+	'X' 176 row;
+	'X' 180 col;
+	Runestr 184 rs;
+};
+
+defn
+Text(addr) {
+	complex Text addr;
+	print("Frame {\n");
+		Frame(addr+0);
+	print("}\n");
+	print("	org	", addr.org, "\n");
+	print("	q0	", addr.q0, "\n");
+	print("	q1	", addr.q1, "\n");
+	print("	what	", addr.what, "\n");
+	print("	w	", addr.w\X, "\n");
+	print("Rectangle scrollr {\n");
+	Rectangle(addr.scrollr);
+	print("}\n");
+	print("Rectangle lastsr {\n");
+	Rectangle(addr.lastsr);
+	print("}\n");
+	print("Rectangle all {\n");
+	Rectangle(addr.all);
+	print("}\n");
+	print("	row	", addr.row\X, "\n");
+	print("	col	", addr.col\X, "\n");
+	print("Runestr rs {\n");
+	Runestr(addr.rs);
+	print("}\n");
+};
+
+sizeofLine = 44;
+aggr Line
+{
+	Rectangle 0 r;
+	'D' 16 state;
+	'D' 20 hastext;
+	'D' 24 hastable;
+	'X' 28 boxes;
+	'X' 32 lastbox;
+	'A' Line 36 prev;
+	'A' Line 40 next;
+};
+
+defn
+Line(addr) {
+	complex Line addr;
+	print("Rectangle r {\n");
+	Rectangle(addr.r);
+	print("}\n");
+	print("	state	", addr.state, "\n");
+	print("	hastext	", addr.hastext, "\n");
+	print("	hastable	", addr.hastable, "\n");
+	print("	boxes	", addr.boxes\X, "\n");
+	print("	lastbox	", addr.lastbox\X, "\n");
+	print("	prev	", addr.prev\X, "\n");
+	print("	next	", addr.next\X, "\n");
+};
+
+sizeofBox = 40;
+aggr Box
+{
+	'A' Item 0 i;
+	Rectangle 4 r;
+	'X' 20 draw;
+	'X' 24 mouse;
+	'X' 28 key;
+	'A' Box 32 prev;
+	'A' Box 36 next;
+};
+
+defn
+Box(addr) {
+	complex Box addr;
+	print("	i	", addr.i\X, "\n");
+	print("Rectangle r {\n");
+	Rectangle(addr.r);
+	print("}\n");
+	print("	draw	", addr.draw\X, "\n");
+	print("	mouse	", addr.mouse\X, "\n");
+	print("	key	", addr.key\X, "\n");
+	print("	prev	", addr.prev\X, "\n");
+	print("	next	", addr.next\X, "\n");
+};
+
+complex Font font;
+sizeofLay = 44;
+aggr Lay
+{
+	Rectangle 0 r;
+	'D' 16 width;
+	'D' 20 xwall;
+	'A' Line 24 lines;
+	'A' Line 28 lastline;
+	'A' Font 32 font;
+	'A' Ifloat 36 floats;
+	'D' 40 laying;
+};
+
+defn
+Lay(addr) {
+	complex Lay addr;
+	print("Rectangle r {\n");
+	Rectangle(addr.r);
+	print("}\n");
+	print("	width	", addr.width, "\n");
+	print("	xwall	", addr.xwall, "\n");
+	print("	lines	", addr.lines\X, "\n");
+	print("	lastline	", addr.lastline\X, "\n");
+	print("	font	", addr.font\X, "\n");
+	print("	floats	", addr.floats\X, "\n");
+	print("	laying	", addr.laying, "\n");
+};
+
+sizeofCimage = 20;
+aggr Cimage
+{
+	{
+	'D' 0 ref;
+	};
+	'A' Image 4 i;
+	'A' Memimage 8 mi;
+	'X' 12 url;
+	'A' Cimage 16 next;
+};
+
+defn
+Cimage(addr) {
+	complex Cimage addr;
+	print("Ref {\n");
+		Ref(addr+0);
+	print("}\n");
+	print("	i	", addr.i\X, "\n");
+	print("	mi	", addr.mi\X, "\n");
+	print("	url	", addr.url\X, "\n");
+	print("	next	", addr.next\X, "\n");
+};
+
+sizeofUrl = 44;
+aggr Url
+{
+	{
+	'D' 0 ref;
+	};
+	'D' 4 id;
+	'D' 8 method;
+	Runestr 12 src;
+	Runestr 20 act;
+	Runestr 28 post;
+	Runestr 36 ctype;
+};
+
+defn
+Url(addr) {
+	complex Url addr;
+	print("Ref {\n");
+		Ref(addr+0);
+	print("}\n");
+	print("	id	", addr.id, "\n");
+	print("	method	", addr.method, "\n");
+	print("Runestr src {\n");
+	Runestr(addr.src);
+	print("}\n");
+	print("Runestr act {\n");
+	Runestr(addr.act);
+	print("}\n");
+	print("Runestr post {\n");
+	Runestr(addr.post);
+	print("}\n");
+	print("Runestr ctype {\n");
+	Runestr(addr.ctype);
+	print("}\n");
+};
+
+sizeofPage = 184;
+aggr Page
+{
+	'A' Url 0 url;
+	Runestr 4 title;
+	'X' 12 w;
+	'A' Image 16 b;
+	Rectangle 20 r;
+	Rectangle 36 all;
+	Rectangle 52 vscrollr;
+	Rectangle 68 hscrollr;
+	'X' 84 row;
+	'X' 88 col;
+	'A' Docinfo 92 doc;
+	'A' Kidinfo 96 kidinfo;
+	'A' Item 100 items;
+	'A' Lay 104 lay;
+	Point 108 pos;
+	'D' 116 selecting;
+	Point 120 top;
+	Point 128 bot;
+	'A' Box 136 topbx;
+	'A' Box 140 botbx;
+	'D' 144 aborting;
+	'D' 148 changed;
+	'D' 152 finished;
+	'D' 156 loading;
+	'X' 160 status;
+	'A' Page 164 parent;
+	'A' Page 168 child;
+	'A' Page 172 next;
+	'A' Cimage 176 cimage;
+	'D' 180 ncimage;
+};
+
+defn
+Page(addr) {
+	complex Page addr;
+	print("	url	", addr.url\X, "\n");
+	print("Runestr title {\n");
+	Runestr(addr.title);
+	print("}\n");
+	print("	w	", addr.w\X, "\n");
+	print("	b	", addr.b\X, "\n");
+	print("Rectangle r {\n");
+	Rectangle(addr.r);
+	print("}\n");
+	print("Rectangle all {\n");
+	Rectangle(addr.all);
+	print("}\n");
+	print("Rectangle vscrollr {\n");
+	Rectangle(addr.vscrollr);
+	print("}\n");
+	print("Rectangle hscrollr {\n");
+	Rectangle(addr.hscrollr);
+	print("}\n");
+	print("	row	", addr.row\X, "\n");
+	print("	col	", addr.col\X, "\n");
+	print("	doc	", addr.doc\X, "\n");
+	print("	kidinfo	", addr.kidinfo\X, "\n");
+	print("	items	", addr.items\X, "\n");
+	print("	lay	", addr.lay\X, "\n");
+	print("Point pos {\n");
+	Point(addr.pos);
+	print("}\n");
+	print("	selecting	", addr.selecting, "\n");
+	print("Point top {\n");
+	Point(addr.top);
+	print("}\n");
+	print("Point bot {\n");
+	Point(addr.bot);
+	print("}\n");
+	print("	topbx	", addr.topbx\X, "\n");
+	print("	botbx	", addr.botbx\X, "\n");
+	print("	aborting	", addr.aborting, "\n");
+	print("	changed	", addr.changed, "\n");
+	print("	finished	", addr.finished, "\n");
+	print("	loading	", addr.loading, "\n");
+	print("	status	", addr.status\X, "\n");
+	print("	parent	", addr.parent\X, "\n");
+	print("	child	", addr.child\X, "\n");
+	print("	next	", addr.next\X, "\n");
+	print("	cimage	", addr.cimage\X, "\n");
+	print("	ncimage	", addr.ncimage, "\n");
+};
+
+sizeof_8_ = 12;
+aggr _8_
+{
+	'A' Url 0 url;
+	'D' 4 nurl;
+	'D' 8 cid;
+};
+
+defn
+_8_(addr) {
+	complex _8_ addr;
+	print("	url	", addr.url\X, "\n");
+	print("	nurl	", addr.nurl, "\n");
+	print("	cid	", addr.cid, "\n");
+};
+
+sizeofWindow = 820;
+aggr Window
+{
+	{
+	'D' 0 ref;
+	};
+	{
+	Lock 4 lock;
+	'D' 8 locked;
+	'A' QLp 12 $head;
+	'A' QLp 16 $tail;
+	};
+	Text 20 tag;
+	Text 212 url;
+	Page 404 page;
+	Text 588 status;
+	'D' 780 owner;
+	'D' 784 inpage;
+	Rectangle 788 r;
+	'X' 804 col;
+	_8_ 808 history;
+};
+
+defn
+Window(addr) {
+	complex Window addr;
+	print("Ref {\n");
+		Ref(addr+0);
+	print("}\n");
+	print("QLock {\n");
+		QLock(addr+4);
+	print("}\n");
+	print("Text tag {\n");
+	Text(addr.tag);
+	print("}\n");
+	print("Text url {\n");
+	Text(addr.url);
+	print("}\n");
+	print("Page page {\n");
+	Page(addr.page);
+	print("}\n");
+	print("Text status {\n");
+	Text(addr.status);
+	print("}\n");
+	print("	owner	", addr.owner, "\n");
+	print("	inpage	", addr.inpage, "\n");
+	print("Rectangle r {\n");
+	Rectangle(addr.r);
+	print("}\n");
+	print("	col	", addr.col\X, "\n");
+	print("_8_ history {\n");
+	_8_(addr.history);
+	print("}\n");
+};
+
+sizeofColumn = 224;
+aggr Column
+{
+	Rectangle 0 r;
+	Text 16 tag;
+	'X' 208 row;
+	'A' Window 212 w;
+	'D' 216 nw;
+	'D' 220 safe;
+};
+
+defn
+Column(addr) {
+	complex Column addr;
+	print("Rectangle r {\n");
+	Rectangle(addr.r);
+	print("}\n");
+	print("Text tag {\n");
+	Text(addr.tag);
+	print("}\n");
+	print("	row	", addr.row\X, "\n");
+	print("	w	", addr.w\X, "\n");
+	print("	nw	", addr.nw, "\n");
+	print("	safe	", addr.safe, "\n");
+};
+
+sizeofRow = 232;
+aggr Row
+{
+	{
+	Lock 0 lock;
+	'D' 4 locked;
+	'A' QLp 8 $head;
+	'A' QLp 12 $tail;
+	};
+	Rectangle 16 r;
+	Text 32 tag;
+	'A' Column 224 col;
+	'D' 228 ncol;
+};
+
+defn
+Row(addr) {
+	complex Row addr;
+	print("QLock {\n");
+		QLock(addr+0);
+	print("}\n");
+	print("Rectangle r {\n");
+	Rectangle(addr.r);
+	print("}\n");
+	print("Text tag {\n");
+	Text(addr.tag);
+	print("}\n");
+	print("	col	", addr.col\X, "\n");
+	print("	ncol	", addr.ncol, "\n");
+};
+
+sizeofExec = 24;
+aggr Exec
+{
+	'X' 0 cmd;
+	'a' 4 p;
+	'a' 12 q;
+	'A' Channel 20 sync;
+};
+
+defn
+Exec(addr) {
+	complex Exec addr;
+	print("	cmd	", addr.cmd\X, "\n");
+	print("	p	", addr.p, "\n");
+	print("	q	", addr.q, "\n");
+	print("	sync	", addr.sync\X, "\n");
+};
+
+sizeofTimer = 16;
+aggr Timer
+{
+	'D' 0 dt;
+	'D' 4 cancel;
+	'A' Channel 8 c;
+	'A' Timer 12 next;
+};
+
+defn
+Timer(addr) {
+	complex Timer addr;
+	print("	dt	", addr.dt, "\n");
+	print("	cancel	", addr.cancel, "\n");
+	print("	c	", addr.c\X, "\n");
+	print("	next	", addr.next\X, "\n");
+};
+
+Scrollsize = 12;
+Scrollgap = 4;
+Margin = 4;
+Border = 2;
+Space = 2;
+Tabspace = 30;
+Boxsize = 12;
+WFont = 0;
+Panspeed = 4;
+Maxtab = 8;
+BUFSIZE = 1024;
+STACK = 32768;
+FALSE = 0;
+TRUE = 1;
+XXX = 2;
+Light = 15658734;
+Dark = 6710886;
+Red = 12255232;
+Back = 13421772;
+complex Mouse mouse;
+complex Mousectl mousectl;
+complex Keyboardctl keyboardctl;
+complex Image but2col;
+complex Image but3col;
+complex Image button;
+complex Image colbutton;
+complex Font passfont;
+complex Cursor boxcursor;
+complex Row row;
+complex Text argtext;
+complex Text seltext;
+complex Text typetext;
+complex Page selpage;
+complex Column activecol;
+Kscrolloneup = 61472;
+Kscrollonedown = 61473;
+complex Channel cplumb;
+complex Channel cexit;
+complex Channel crefresh;
+complex Channel cexit;
+complex Channel cplumb;
+complex Mousectl mousectl;
+complex Column threadmain:c;
+WPERCOL = 8;
+complex Column readpage:c;
+complex Window readpage:w;
+complex Runestr readpage:rs;
+complex Plumbmsg plumbproc:m;
+complex Timer keyboardthread:timer;
+complex Text keyboardthread:t;
+KTimer = 0;
+KKey = 1;
+NKALT = 2;
+complex Plumbmsg mousethread:pm;
+complex Mouse mousethread:m;
+complex Text mousethread:t;
+MResize = 0;
+MMouse = 1;
+MPlumb = 2;
+MRefresh = 3;
+NMALT = 4;
+complex Cursor boxcursor;
+complex Rectangle iconinit:r;
+NSnarf = 1000;
+MAXSNARF = 102400;
+complex Runestr putsnarf:rs;
+complex Runestr getsnarf:rs;
+complex Column colinit:c;
+complex Rectangle colinit:r;
+complex Rectangle colinit:r1;
+complex Text colinit:t;
+complex Column coladd:c;
+complex Window coladd:w;
+complex Window coladd:clone;
+complex Rectangle coladd:r;
+complex Rectangle coladd:r1;
+complex Window coladd:v;
+complex Column colclose:c;
+complex Window colclose:w;
+complex Rectangle colclose:r;
+complex Column colcloseall:c;
+complex Window colcloseall:w;
+complex Column colmousebut:c;
+complex Column colresize:c;
+complex Rectangle colresize:r;
+complex Rectangle colresize:r1;
+complex Rectangle colresize:r2;
+complex Window colresize:w;
+complex Column colsort:c;
+complex Rectangle colsort:r;
+complex Rectangle colsort:r1;
+complex Rectangle colsort:rp;
+complex Window colsort:wp;
+complex Window colsort:w;
+complex Column colgrow:c;
+complex Window colgrow:w;
+complex Rectangle colgrow:r;
+complex Rectangle colgrow:cr;
+complex Window colgrow:v;
+complex Column coldragwin:c;
+complex Window coldragwin:w;
+complex Rectangle coldragwin:r;
+complex Point coldragwin:p;
+complex Point coldragwin:op;
+complex Window coldragwin:v;
+complex Column coldragwin:nc;
+complex Column colwhich:c;
+complex Point colwhich:p;
+complex Window colwhich:w;
+complex Text colwhich:t;
+complex Column colclean:c;
+sizeofExectab = 16;
+aggr Exectab
+{
+	'X' 0 name;
+	'X' 4 fn;
+	'D' 8 flag1;
+	'D' 12 flag2;
+};
+
+defn
+Exectab(addr) {
+	complex Exectab addr;
+	print("	name	", addr.name\X, "\n");
+	print("	fn	", addr.fn\X, "\n");
+	print("	flag1	", addr.flag1, "\n");
+	print("	flag2	", addr.flag2, "\n");
+};
+
+complex Exectab lookup:e;
+complex Text execute:t;
+complex Exectab execute:e;
+complex Text newcol:et;
+complex Column newcol:c;
+complex Text delcol:t;
+complex Column delcol:c;
+complex Text del:et;
+complex Text sort:et;
+complex Column debug:c;
+complex Text stop:t;
+complex Text get:t;
+complex Window get:w;
+complex Text go:et;
+complex Text go:t;
+complex Window go:w;
+complex Page go:p;
+complex Text cut:t;
+complex Runestr cut:rs;
+complex Text paste:t;
+complex Runestr paste:rs;
+sizeof_5_ = 4;
+aggr _5_
+{
+	'A' Text 0 at;
+	'X' 0 ar;
+};
+
+defn
+_5_(addr) {
+	complex _5_ addr;
+	print("	at	", addr.at\X, "\n");
+	print("	ar	", addr.ar\X, "\n");
+};
+
+sizeofExpand = 40;
+aggr Expand
+{
+	'U' 0 q0;
+	'U' 4 q1;
+	'X' 8 name;
+	'D' 12 nname;
+	'X' 16 bname;
+	'D' 20 jump;
+	{
+	'A' Text 24 at;
+	'X' 24 ar;
+	};
+	'X' 28 agetc;
+	'D' 32 a0;
+	'D' 36 a1;
+};
+
+defn
+Expand(addr) {
+	complex Expand addr;
+	print("	q0	", addr.q0, "\n");
+	print("	q1	", addr.q1, "\n");
+	print("	name	", addr.name\X, "\n");
+	print("	nname	", addr.nname, "\n");
+	print("	bname	", addr.bname\X, "\n");
+	print("	jump	", addr.jump, "\n");
+	print("_5_ {\n");
+		_5_(addr+24);
+	print("}\n");
+	print("	agetc	", addr.agetc\X, "\n");
+	print("	a0	", addr.a0, "\n");
+	print("	a1	", addr.a1, "\n");
+};
+
+complex Text expand:t;
+complex Expand expand:e;
+complex Text look3:t;
+complex Expand look3:e;
+complex Text look3:ct;
+complex Runestr look3:rs;
+complex Text search:ct;
+complex Text printarg:argt;
+complex Text getarg:argt;
+complex Expand getarg:e;
+complex Window lookpage:w;
+complex Column lookpage:c;
+complex Page lookpage:p;
+complex Page openpage:p;
+complex Runestr openpage:rs;
+complex Window openpage:w;
+complex Plumbmsg plumblook:m;
+complex Runestr plumblook:rs;
+complex Text new:et;
+complex Lay sizetext:lay;
+complex Itext sizetext:i;
+complex Lay sizerule:lay;
+complex Irule sizerule:i;
+complex Iimage sizeimage:i;
+complex Cimage sizeimage:ci;
+complex Iformfield sizetextfield:i;
+complex Formfield sizetextfield:ff;
+complex Font sizetextfield:f;
+complex Iformfield sizecheck:i;
+complex Iformfield sizebutton:i;
+complex Font sizebutton:f;
+complex Lay sizefimage:lay;
+complex Iformfield sizefimage:i;
+complex Iimage sizefimage:ii;
+complex Iformfield sizeselect:i;
+complex Option sizeselect:o;
+complex Font sizeselect:f;
+complex Lay sizeformfield:lay;
+complex Iformfield sizeformfield:i;
+complex Lay sizetable:lay;
+complex Itable sizetable:i;
+complex Lay sizespacer:lay;
+complex Ispacer sizespacer:i;
+complex Lay sizeitem:lay;
+complex Item sizeitem:i;
+complex Box drawtext:b;
+complex Page drawtext:p;
+complex Image drawtext:im;
+complex Rectangle drawtext:r;
+complex Rectangle drawtext:r1;
+complex Image drawtext:c;
+complex Point drawtext:pt;
+complex Font drawtext:f;
+complex Itext drawtext:i;
+complex Box drawrule:b;
+complex Page drawrule:p;
+complex Image drawrule:im;
+complex Irule drawrule:i;
+complex Point drawrule:pt0;
+complex Point drawrule:pt1;
+complex Box drawimage:b;
+complex Page drawimage:p;
+complex Image drawimage:im;
+complex Rectangle drawimage:r;
+complex Cimage drawimage:ci;
+complex Iimage drawimage:i;
+complex Image drawimage:c;
+complex Image drawtextfield:im;
+complex Rectangle drawtextfield:r;
+complex Iformfield drawtextfield:i;
+complex Formfield drawtextfield:ff;
+complex Text drawtextfield:t;
+complex Font drawtextfield:f;
+complex Image drawcheck:im;
+complex Rectangle drawcheck:r;
+complex Formfield drawcheck:f;
+complex Point drawcheck:pt;
+complex Image drawbutton:im;
+complex Rectangle drawbutton:r;
+complex Formfield drawbutton:f;
+complex Image drawselect:im;
+complex Rectangle drawselect:r;
+complex Iformfield drawselect:i;
+complex Formfield drawselect:f;
+complex Box drawformfield:b;
+complex Page drawformfield:p;
+complex Image drawformfield:im;
+complex Formfield drawformfield:f;
+complex Page whichtarget1:p;
+complex Kidinfo whichtarget1:k;
+complex Page whichtarget1:c;
+complex Page whichtarget1:ret;
+complex Page whichtarget:p;
+complex Page whichtarget:r;
+complex Box mouselink:b;
+complex Page mouselink:p;
+complex Runestr mouselink:rs;
+complex Anchor mouselink:a;
+complex Page submit:p;
+complex Formfield submit:formfield;
+complex Formfield submit:f;
+complex Form submit:form;
+complex Runestr submit:src;
+complex Runestr submit:post;
+complex Formfield setradios:formfield;
+complex Formfield setradios:f;
+complex Box selectmouse:b;
+complex Page selectmouse:p;
+complex Formfield selectmouse:f;
+complex Option selectmouse:o;
+complex Menu selectmouse:m;
+complex Box mouseform:b;
+complex Page mouseform:p;
+complex Rectangle mouseform:r;
+complex Rectangle mouseform:cr;
+complex Formfield mouseform:f;
+complex Text mouseform:t;
+complex Box keyform:b;
+complex Page keyform:p;
+complex Rectangle keyform:cr;
+complex Formfield keyform:f;
+complex Text keyform:t;
+complex Box boxinit:b;
+complex Line boxalloc:l;
+complex Item boxalloc:i;
+complex Rectangle boxalloc:r;
+complex Box boxalloc:b;
+complex Line pttobox:l;
+complex Point pttobox:xy;
+complex Box pttobox:b;
+complex Itable tbtoline:i;
+complex Point tbtoline:xy;
+complex Tablecell tbtoline:c;
+complex Lay linewhich:lay;
+complex Point linewhich:xy;
+complex Line linewhich:l;
+complex Box linewhich:b;
+complex Lay boxwhich:lay;
+complex Point boxwhich:xy;
+complex Line boxwhich:l;
+complex Lay justlay:lay;
+complex Line justlay:l;
+complex Itable justtable:i;
+complex Tablecell justtable:c;
+complex Line justline1:l;
+complex Box justline1:b;
+complex Lay justline:lay;
+complex Line justline:l;
+complex Lay newline:lay;
+complex Line newline:l;
+complex Line newline:last;
+complex Lay layitem:lay;
+complex Item layitem:i;
+complex Rectangle layitem:r;
+complex Line layitem:l;
+complex Box layitem:b;
+complex Lay linefix:lay;
+complex Line linefix:l;
+complex Item layitems:items;
+complex Rectangle layitems:r;
+complex Lay layitems:lay;
+complex Line layitems:l;
+complex Item layitems:i;
+complex Page laypage:p;
+complex Page drawline:p;
+complex Image drawline:im;
+complex Line drawline:l;
+complex Box drawline:b;
+complex Page laydraw:p;
+complex Image laydraw:im;
+complex Lay laydraw:lay;
+complex Rectangle laydraw:r;
+complex Line laydraw:l;
+complex Page pagedraw:p;
+complex Image pagedraw:im;
+complex Table laytablefree:tables;
+complex Tablecell laytablefree:c;
+complex Table laytablefree:t;
+complex Lay layfree:lay;
+complex Line layfree:l;
+complex Line layfree:nextline;
+complex Box layfree:b;
+complex Box layfree:nextbox;
+complex Page laysnarf:p;
+complex Lay laysnarf:lay;
+complex Runestr laysnarf:rs;
+complex Tablecell laysnarf:c;
+complex Itext laysnarf:i;
+complex Font laysnarf:f;
+complex Line laysnarf:l;
+complex Box laysnarf:b;
+complex Channel cexit;
+complex Channel cplumb;
+complex Mousectl mousectl;
+complex Column threadmain:c;
+WPERCOL = 8;
+complex Column readpage:c;
+complex Window readpage:w;
+complex Runestr readpage:rs;
+complex Plumbmsg plumbproc:m;
+complex Timer keyboardthread:timer;
+complex Text keyboardthread:t;
+KTimer = 0;
+KKey = 1;
+NKALT = 2;
+complex Plumbmsg mousethread:pm;
+complex Mouse mousethread:m;
+complex Text mousethread:t;
+MResize = 0;
+MMouse = 1;
+MPlumb = 2;
+MRefresh = 3;
+NMALT = 4;
+complex Cursor boxcursor;
+complex Rectangle iconinit:r;
+NSnarf = 1000;
+MAXSNARF = 102400;
+complex Runestr putsnarf:rs;
+complex Runestr getsnarf:rs;
+complex Page addchild:p;
+complex Page addchild:c;
+complex Page addchild:t;
+complex Page loadchilds:p;
+complex Kidinfo loadchilds:k;
+complex Runestr loadchilds:rs;
+complex Kidinfo loadchilds:t;
+complex Page loadchilds:c;
+sizeof_5_ = 8;
+aggr _5_
+{
+	'X' 0 mime;
+	'X' 4 filter;
+};
+
+defn
+_5_(addr) {
+	complex _5_ addr;
+	print("	mime	", addr.mime\X, "\n");
+	print("	filter	", addr.filter\X, "\n");
+};
+
+complex Cimage cimages;
+complex Cimage freecimage:ci;
+complex Cimage freecimage:ci1;
+complex Page closeimages:p;
+complex Channel loadimg:sync;
+complex Cimage loadimg:ci;
+complex Runestr loadimg:rs;
+complex Exec loadimg:e;
+complex Cimage findimg:ci;
+complex Page loadimages:p;
+complex Cimage loadimages:ci;
+complex Iimage loadimages:i;
+complex Page pageloadproc:p;
+sizeof_6_ = 8;
+aggr _6_
+{
+	'X' 0 mime;
+	'D' 4 type;
+};
+
+defn
+_6_(addr) {
+	complex _6_ addr;
+	print("	mime	", addr.mime\X, "\n");
+	print("	type	", addr.type, "\n");
+};
+
+complex Page pageload:p;
+complex Url pageload:url;
+complex Page pageget:p;
+complex Runestr pageget:src;
+complex Runestr pageget:post;
+complex Page pageclose:p;
+complex Page pageclose:c;
+complex Page pageclose:nc;
+complex Page pageabort:p;
+complex Page pageabort:c;
+complex Image tmp;
+complex Page renderchilds:p;
+complex Rectangle renderchilds:r;
+complex Kidinfo renderchilds:k;
+complex Page renderchilds:c;
+complex Page pagerender1:p;
+complex Rectangle pagerender1:r;
+complex Page pagerender:p;
+complex Page pageredraw:p;
+complex Rectangle pageredraw:r;
+complex Page pageselect1:p;
+complex Point pageselect1:mp;
+complex Point pageselect1:npos;
+complex Point pageselect1:opos;
+complex Page pagedoubleclick:p;
+complex Point pagedoubleclick:xy;
+complex Line pagedoubleclick:l;
+complex Box pagedoubleclick:b;
+complex Page pageselect:p;
+complex Page pagewhich:p;
+complex Point pagewhich:xy;
+complex Page pagewhich:c;
+complex Page pagemouse:p;
+complex Point pagemouse:xy;
+complex Box pagemouse:b;
+complex Page pagetype:p;
+complex Point pagetype:xy;
+complex Box pagetype:b;
+complex Page pagesnarf:p;
+complex Runestr pagesnarf:rs;
+complex Row rowinit:row;
+complex Rectangle rowinit:r;
+complex Rectangle rowinit:r1;
+complex Text rowinit:t;
+complex Row rowadd:row;
+complex Column rowadd:c;
+complex Rectangle rowadd:r;
+complex Rectangle rowadd:r1;
+complex Column rowadd:d;
+complex Row rowresize:row;
+complex Rectangle rowresize:r;
+complex Rectangle rowresize:r1;
+complex Rectangle rowresize:r2;
+complex Column rowresize:c;
+complex Row rowdragcol:row;
+complex Column rowdragcol:c;
+complex Rectangle rowdragcol:r;
+complex Point rowdragcol:p;
+complex Point rowdragcol:op;
+complex Column rowdragcol:d;
+complex Row rowclose:row;
+complex Column rowclose:c;
+complex Rectangle rowclose:r;
+complex Row rowwhichcol:row;
+complex Point rowwhichcol:p;
+complex Column rowwhichcol:c;
+complex Row rowwhich:row;
+complex Point rowwhich:p;
+complex Column rowwhich:c;
+complex Row rowclean:row;
+complex Column allwindows:c;
+complex Image vscrtmp;
+complex Image hscrtmp;
+complex Rectangle scrpos:r;
+complex Rectangle scrpos:q;
+complex Text textscrdraw:t;
+complex Rectangle textscrdraw:r;
+complex Rectangle textscrdraw:r1;
+complex Rectangle textscrdraw:r2;
+complex Image textscrdraw:b;
+complex Timer scrsleep:timer;
+complex Text textscroll:t;
+complex Rectangle textscroll:s;
+Scrbord = 1;
+complex Page pagescrldraw:p;
+complex Rectangle pagescrldraw:r1;
+complex Page pagescroll:p;
+complex Rectangle pagescroll:s;
+complex Point pagescroll:mxy;
+complex Page pagescrollxy:p;
+complex Box drawtable:b;
+complex Page drawtable:p;
+complex Image drawtable:im;
+complex Rectangle drawtable:r;
+complex Rectangle drawtable:cr;
+complex Tablecell drawtable:c;
+complex Table drawtable:t;
+Tablemax = 2000;
+complex Table settable:t;
+complex Tablecell settable:c;
+complex Lay settable:lay;
+Ttoplevel = 1;
+complex Page settables:p;
+complex Table settables:t;
+complex Item settables:i;
+complex Table cellwidth:t;
+complex Tablecell cellwidth:c;
+complex Table cellheight:t;
+complex Tablecell cellheight:c;
+complex Table fixcols:t;
+complex Tablecell fixcols:c;
+complex Table tablewidth:t;
+complex Tablecell tablewidth:c;
+complex Table fixrows:t;
+complex Tablecell fixrows:c;
+complex Lay fixrows:lay;
+complex Table tableheight:t;
+complex Tablecell tableheight:c;
+complex Lay tableheight:lay;
+complex Table tablesize:t;
+complex Itable laytable:it;
+complex Rectangle laytable:r;
+complex Rectangle laytable:cr;
+complex Tablecell laytable:c;
+complex Table laytable:t;
+complex Text textinit:t;
+complex Image textinit:b;
+complex Rectangle textinit:r;
+complex Font textinit:f;
+complex Image textinit:cols;
+complex Text textredraw:t;
+complex Rectangle textredraw:r;
+complex Font textredraw:f;
+complex Image textredraw:b;
+complex Rectangle textredraw:r1;
+complex Text textresize:t;
+complex Image textresize:b;
+complex Rectangle textresize:r;
+complex Text textclose:t;
+complex Text textinsert:t;
+complex Text textfill:t;
+complex Text textdelete:t;
+complex Text textbswidth:t;
+complex Text texttype:t;
+complex Text clicktext;
+complex Text selecttext;
+complex Frame framescroll:f;
+complex Text textframescroll:t;
+complex Text textselect:t;
+complex Text textshow:t;
+complex Frame selrestore:f;
+complex Point selrestore:pt0;
+complex Text textsetselect:t;
+DELAY = 2;
+MINMOVE = 4;
+complex Frame xselect:f;
+complex Mousectl xselect:mc;
+complex Image xselect:col;
+complex Point xselect:mp;
+complex Point xselect:pt0;
+complex Point xselect:pt1;
+complex Point xselect:qt;
+complex Text textselect23:t;
+complex Image textselect23:high;
+complex Text textselect2:t;
+complex Text textselect2:tp;
+complex Text textselect3:t;
+complex Text textdoubleclick:t;
+complex Text textclickmatch:t;
+complex Text textbacknl:t;
+complex Text textsetorigin:t;
+complex Text textset:t;
+complex Text textmouse:t;
+complex Point textmouse:xy;
+complex Text textmouse:argt;
+complex Channel ctimer;
+complex Timer timer;
+complex Timer timerstop:t;
+complex Timer timercancel:t;
+complex Timer timerproc:t;
+complex Timer timerproc:x;
+complex Timer timerstart:t;
+complex Runestr urlalloc:src;
+complex Runestr urlalloc:post;
+complex Url urlalloc:u;
+complex Url urlfree:u;
+complex Url urldup:a;
+complex Url urldup:b;
+complex Url urlopen:u;
+complex Point prevmouse;
+complex Window mousew;
+complex Runestr bytetorunestr:rs;
+complex Runestr runestreq:a;
+complex Runestr runestreq:b;
+complex Runestr closerunestr:rs;
+complex Runestr copyrunestr:a;
+complex Runestr copyrunestr:b;
+complex Item istextfield:i;
+complex Formfield istextfield:ff;
+complex Item forceitem:i;
+complex Dimen dimwidth:d;
+complex Dimen frdims:d;
+complex Docinfo docbg:d;
+complex Cimage docbg:ci;
+complex Image docbg:bg;
+complex Display eallocimage:d;
+complex Rectangle eallocimage:r;
+complex Image eallocimage:i;
+complex Image rect3d:im;
+complex Rectangle rect3d:r;
+complex Image rect3d:c;
+complex Point rect3d:sp;
+complex Image ellipse3d:im;
+complex Point ellipse3d:p;
+complex Image ellipse3d:c;
+complex Point ellipse3d:sp;
+complex Image colarray:c;
+complex Image colarray:c0;
+complex Image colarray:c1;
+complex Image colarray:c2;
+sizeofColor = 12;
+aggr Color
+{
+	'D' 0 rgb;
+	'A' Image 4 i;
+	'A' Color 8 next;
+};
+
+defn
+Color(addr) {
+	complex Color addr;
+	print("	rgb	", addr.rgb, "\n");
+	print("	i	", addr.i\X, "\n");
+	print("	next	", addr.next\X, "\n");
+};
+
+NHASH = 19;
+complex Color getcolor:c;
+complex Runestr plumbrunestr:rs;
+complex Plumbmsg plumbrunestr:m;
+complex Window setstatus:w;
+complex Iimage reverseimages:$head;
+complex Iimage reverseimages:r;
+complex Iimage reverseimages:c;
+complex Iimage reverseimages:n;
+complex Reprog urlprog;
+complex Channel execproc:sync;
+complex Exec execproc:e;
+sizeof_9_ = 8;
+aggr _9_
+{
+	'X' 0 mime;
+	'X' 4 tcs;
+};
+
+defn
+_9_(addr) {
+	complex _9_ addr;
+	print("	mime	", addr.mime\X, "\n");
+	print("	tcs	", addr.tcs\X, "\n");
+};
+
+complex Channel tcs:sync;
+complex Exec tcs:e;
+complex Font xtofchar:f;
+complex Page istextsel:p;
+complex Rectangle istextsel:r;
+complex Font istextsel:f;
+complex Page getpt:p;
+complex Point getpt:xy;
+complex Cimage getimage:ci;
+complex Rectangle getimage:r;
+complex Memimage getimage:mi;
+complex Image getimage:i;
+complex Image getimage:i2;
+complex Item fixtext1:list;
+complex Itext fixtext1:text;
+complex Itext fixtext1:ntext;
+complex Item fixtext1:it;
+complex Item fixtext1:prev;
+complex Page fixtext:p;
+complex Tablecell fixtext:c;
+complex Table fixtext:t;
+sizeofRefresh = 8;
+aggr Refresh
+{
+	'A' Page 0 p;
+	'A' Refresh 4 next;
+};
+
+defn
+Refresh(addr) {
+	complex Refresh addr;
+	print("	p	", addr.p\X, "\n");
+	print("	next	", addr.next\X, "\n");
+};
+
+complex Refresh refreshs;
+complex Page addrefresh:p;
+complex Refresh addrefresh:r;
+complex Refresh flushrefresh:r;
+complex Refresh flushrefresh:next;
+complex Page flushrefresh:p;
+complex Window savemouse:w;
+complex Window restoremouse:w;
+complex Page makenewwindow:p;
+complex Column makenewwindow:c;
+complex Window makenewwindow:w;
+complex Window makenewwindow:bigw;
+complex Window makenewwindow:emptyw;
+complex Page makenewwindow:emptyp;
+complex Window wininit:w;
+complex Rectangle wininit:r;
+complex Rectangle wininit:r1;
+complex Rectangle wininit:br;
+complex Window winresize:w;
+complex Rectangle winresize:r;
+complex Rectangle winresize:r1;
+complex Rectangle winresize:br;
+complex Window winclose1:w;
+complex Window winclose:w;
+complex Window winlock:w;
+complex Window winunlock:w;
+complex Window winsettag1:w;
+complex Image winsettag1:b;
+complex Rectangle winsettag1:br;
+complex Runestr winsettag1:old;
+complex Window winsettag:w;
+complex Window winaddhist:w;
+complex Url winaddhist:u;
+complex Url winaddhist:url;
+complex Window wintext:w;
+complex Point wintext:xy;
+complex Window wintype:w;
+complex Point wintype:xy;
+complex Text wintype:t;
+complex Window winmouse:w;
+complex Point winmouse:xy;
+complex Text winmouse:t;
+complex Window winmousebut:w;
+complex Window windebug:w;
+complex Page windebug:p;
