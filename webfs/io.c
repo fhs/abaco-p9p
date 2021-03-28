@@ -12,15 +12,16 @@
 #include "fns.h"
 
 static long
-_iovfprint(int fd, char *fmt, va_list args)
+_iovfprint(va_list *arg)
 {
+	int fd;
+	char *fmt;
 	va_list arg2;
-	int n;
 
-	va_copy(arg2, args);
-	n = vfprint(fd, fmt, arg2);
-	va_end(arg2);
-	return n;
+	fd = va_arg(*arg, int);
+	fmt = va_arg(*arg, char*);
+	arg2 = va_arg(*arg, va_list);
+	return vfprint(fd, fmt, arg2);
 }
 
 int
