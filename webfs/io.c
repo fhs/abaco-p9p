@@ -16,12 +16,10 @@ _iovfprint(va_list *arg)
 {
 	int fd;
 	char *fmt;
-	va_list arg2;
 
 	fd = va_arg(*arg, int);
 	fmt = va_arg(*arg, char*);
-	arg2 = va_arg(*arg, va_list);
-	return vfprint(fd, fmt, arg2);
+	return vfprint(fd, fmt, va_arg(*arg, va_list));
 }
 
 int
